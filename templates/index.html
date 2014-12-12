@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link id="css" type="text/css" rel="stylesheet" href="/static/css/style.css"/>
+    <script src="/static/js/jquery-1.11.1.min.js"></script>
+  </head>
+<body>
+<header id="header">
+
+<div class="radio-tabs" id="color_tabs">
+  <input class="tab_old" type="radio" title="Dark"  name="color_tab" id="dark" />
+  <input class="tab_old" type="radio" title="Light" name="color_tab" id="light" checked />
+  <div class="tabs">
+    <label for="dark"  id="dark_tab"  class="tab">Dark</label>
+    <label for="light" id="light_tab" class="tab">Light</label>
+  </div>
+</div>
+
+</header>
+<h1>Node Tree: Galaxy Zoo</h1>
+
+<div class="radio-tabs" id="zoo_tabs">
+  <input class="tab_old" type="radio" title="Zoo 1" name="zoo_tab" id="zoo_1" disabled />
+  <input class="tab_old" type="radio" title="Zoo 2" name="zoo_tab" id="zoo_2" checked />
+  <input class="tab_old" type="radio" title="Zoo 3" name="zoo_tab" id="zoo_3" />
+  <input class="tab_old" type="radio" title="Zoo 4" name="zoo_tab" id="zoo_4" disabled />
+  <div class="tabs">
+    <label for="zoo_1" id="zoo1_tab" class="tab">Zoo 1</label>
+    <label for="zoo_2" id="zoo2_tab" class="tab">Zoo 2</label>
+    <label for="zoo_3" id="zoo3_tab" class="tab">Zoo 3</label>
+    <label for="zoo_4" id="zoo4_tab" class="tab">Zoo 4</label>
+  </div>
+</div>
+
+<div class="radio-tabs" id="weight_tabs">
+  <input class="tab_old" type="radio" title="Raw"      name="weight_tab" id="weight_raw" checked />
+  <input class="tab_old" type="radio" title="Weighted" name="weight_tab" id="weight_weighted" />
+  <input class="tab_old" type="radio" title="Bias"     name="weight_tab" id="weight_bias"  disabled/>  
+  <div class="tabs">
+    <label for="weight_raw"      id="raw_tab"      class="tab">Raw Votes</label>
+    <label for="weight_weighted" id="weighted_tab" class="tab">Weighted Votes</label>
+    <label for="weight_bias"     id="bias_tab"     class="tab">Bias Corrected Votes</label>
+  </div>
+</div>
+<br style="clear:both;" />
+
+<div id="tree">
+  <div id="sequence"></div>
+  <div id="RA_DEC"><span id="ra_dec"></span></div>
+  <div id="body"></div>
+  <div id="odd"></div>
+  
+  <div id="sliders">
+  <div class="plot_controls">
+    <label for="slider_charge">Charge: <span id="slider_charge_value">...</span></label>
+    <input type="range" min="1" max="5" value="2.5" step="0.01" id="slider_charge" />
+  </div>
+  <div class="plot_controls">
+    <label for="slider_strength">Link Strength: <span id="slider_strength_value">...</span></label>
+    <input type="range" min="0" max="1" value="1" step="0.01" id="slider_strength" />
+  </div>
+  <div class="plot_controls">
+    <label for="slider_friction">Friction: <span id="slider_friction_value">...</span></label>
+    <input type="range" min="0" max="1" value="0.2" step="0.01" id="slider_friction" />
+  </div>
+  <div class="plot_controls">
+    <button type="button" id="reset_button">Reset</button>
+  </div>
+  <br style="clear:both;" />
+  </div>
+
+</div>
+
+<footer>
+  <aside>Dec 12, 2014</aside>
+  <a href="http://wwww.zooniverse.org" rel="author">Zooniverse</a>
+</footer>
+
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+<script src="/static/js/d3.min.js"></script>
+<script src="/static/js/gz.js"></script>
+</body>
+</html>
