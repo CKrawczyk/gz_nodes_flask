@@ -2,10 +2,9 @@ from flask import Flask, jsonify, render_template, request
 from flask.ext.sqlalchemy import SQLAlchemy
 from gz_classes import *
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:@localhost/gz3'
-app.config['SQLALCHEMY_BINDS'] = {'gz2':'mysql+mysqlconnector://root:@localhost/gz2',
-                                  'gz3':'mysql+mysqlconnector://root:@localhost/gz3'}
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_pyfile('gz_nodes.cfg', silent=True)
+
 db=SQLAlchemy(app)
 db.Model.metadata.reflect(db.get_engine(app,'gz2'))
 BC2=get_tables(db,'gz2')

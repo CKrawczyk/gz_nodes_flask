@@ -1,0 +1,5 @@
+web:
+  build: .
+  command: python routs.py
+  ports:
+  - "5000:5000"
