@@ -9,8 +9,8 @@ This app is built using flask and flask-sqlalchemy to connect to a
 MySQL database. The `instance/gz_nodes.cfg` file should contain the
 information needed to connect to the database (with databases named `gz2` and `gz3`):
 
-`SQLALCHEMY_DATABASE_URI =mysql+mysqlconnector://username:password@host:port/gz2
-SQLALCHEMY_BINDS = {'gz2': mysql+mysqlconnector://username:password@host:port/gz2, 'gz3': mysql+mysqlconnector://username:password@host:port/gz3`
+`SQLALCHEMY_DATABASE_URI =mysql+mysqlconnector://username:password@host:port/gz2`
+`SQLALCHEMY_BINDS = {'gz2': mysql+mysqlconnector://username:password@host:port/gz2, 'gz3': mysql+mysqlconnector://username:password@host:port/gz3`
 
 To run locally `python routs.py` and navigate to `http://127.0.0.1:5000/` in a web browser.
 
