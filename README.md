@@ -1,3 +1,5 @@
+[![Build Status](http://img.shields.io/badge/Built%20at-%23dotastro-blue.svg?style=flat)]
+
 gz_nodes_flask
 ============
 
