@@ -11,7 +11,7 @@ BC2=get_tables(db,'gz2')
 db.Model.metadata.reflect(db.get_engine(app,'gz3'),extend_existing=True)
 BC3=get_tables(db,'gz3')
 db_dict={'gz2':GZ2(db,app,BC2),
-         'gz3':GZ3(db,app,BC3)}
+            'gz3':GZ3(db,app,BC3)}
 
 @app.route('/')
 def index():
@@ -28,7 +28,7 @@ def get_path():
     table = request.args.get('table', 'gz2', type=str)
     argv = request.args.get('argv', '180 0', type=str)
     return jsonify(result=db_dict[table].run(argv))
-    
+
 if __name__=="__main__":
-    app.debug = True
+    #app.debug = True
     app.run()
