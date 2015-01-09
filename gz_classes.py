@@ -23,6 +23,27 @@ def get_tables(db,bk):
             pass
     return MyTables
 
+#=====================================================
+#function to split lists on a value, used to pull out
+#anything odd nodes
+#taken from http://stackoverflow.com/questions/4322705/split-a-list-into-nested-lists-on-a-value
+def ssplit2(seq,splitters):
+    seq=list(seq)
+    if splitters and seq:
+        splitters=set(splitters).intersection(seq)
+        if splitters:
+            result=[]
+            begin=0
+            for end in range(len(seq)):
+                if seq[end] in splitters:
+                    if end > begin:
+                        result.append(seq[begin:end])
+                    begin=end+1
+            if begin<len(seq):
+                result.append(seq[begin:])
+            return result
+    return [seq]
+
 #======================================================
 #The base class for the two databases.
 class Connect:
@@ -91,8 +112,11 @@ class Connect:
                 # check that all votes makes a vlid path through the tree (no missing or repeated nodes!)
                 if self.valid_path(i):
                     if 14 in i:
-                        odd_dict[i[-1]]=odd_dict.get(i[-1],0)+1
-                        i=i[:-2]
+                        #could be more then 1 anything odd answer
+                        ii,jj=ssplit2(i,[14])
+                        for j in jj:
+                            odd_dict[j]=odd_dict.get(j,0)+1
+                        i=ii
                     elif 15 in i:
                         i=i[:-1]
                     for key in zip(i[:-1],i[1:]):
@@ -227,12 +251,12 @@ gz2_valid_path={0:[1,2,3],
                 16:[14,15],
                 17:[14,15],
                 18:[14,15],
-                19:[-1],
-                20:[-1],
-                21:[-1],
-                22:[-1],
-                23:[-1],
-                24:[-1],
+                19:[-1,20,21,22,23,24,38],
+                20:[-1,19,21,22,23,24,38],
+                21:[-1,19,20,22,23,24,38],
+                22:[-1,19,20,21,23,24,38],
+                23:[-1,19,20,21,22,24,38],
+                24:[-1,19,20,21,22,23,38],
                 25:[14,15],
                 26:[14,15],
                 27:[14,15],
@@ -245,7 +269,7 @@ gz2_valid_path={0:[1,2,3],
                 34:[10,11,12,13],
                 36:[10,11,12,13],
                 37:[10,11,12,13],
-                38:[-1]}
+                38:[-1,19,20,21,22,23,24]}
 
 gz3_valid_path={0:[1,2,3],
                 1:[16,17,18],
@@ -266,12 +290,12 @@ gz3_valid_path={0:[1,2,3],
                 16:[14,15],
                 17:[14,15],
                 18:[14,15],
-                19:[-1],
-                20:[-1],
-                21:[-1],
-                22:[-1],
-                23:[-1],
-                24:[-1],
+                19:[-1,20,21,22,23,24,38],
+                20:[-1,19,21,22,23,24,38],
+                21:[-1,19,20,22,23,24,38],
+                22:[-1,19,20,21,23,24,38],
+                23:[-1,19,20,21,22,24,38],
+                24:[-1,19,20,21,22,23,38],
                 25:[14,15],
                 26:[14,15],
                 27:[14,15],
@@ -284,7 +308,7 @@ gz3_valid_path={0:[1,2,3],
                 34:[10,11,12,13],
                 36:[10,11,12,13],
                 37:[10,11,12,13],
-                38:[-1],
+                38:[-1,19,20,21,22,23,24],
                 39:[60,50,51,52,53,54],
                 40:[4,5],
                 41:[],
