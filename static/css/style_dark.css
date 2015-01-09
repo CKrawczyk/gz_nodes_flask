@@ -68,6 +68,7 @@ aside, #galaxies, #random_gal {
 
 #galaxies {
   top: 55px;
+  border-radius: 20px;
 }
 
 .attribution {
