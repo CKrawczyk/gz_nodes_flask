@@ -11,8 +11,11 @@ This app is built using flask and flask-sqlalchemy to connect to a
 MySQL database. The `instance/gz_nodes.cfg` file should contain the
 information needed to connect to the database (with databases named `gz2` and `gz3`):
 
-`SQLALCHEMY_DATABASE_URI =mysql+mysqlconnector://username:password@host:port/gz2`
-`SQLALCHEMY_BINDS = {'gz2': mysql+mysqlconnector://username:password@host:port/gz2, 'gz3': mysql+mysqlconnector://username:password@host:port/gz3`
+```
+SQLALCHEMY_DATABASE_URI =mysql+mysqlconnector://username:password@host:port/gz2
+SQLALCHEMY_BINDS ={'gz2':mysql+mysqlconnector://username:password@host:port/gz2,
+                                     'gz3':mysql+mysqlconnector://username:password@host:port/gz3}
+```
 
 *NOTE*: If using docker set host to the result of `"ip route
  show 0.0.0.0/0 | grep -Eo 'via \S+' | awk '{ print \$2 }'"`. If using
@@ -38,12 +41,6 @@ Navigate to `http://localhost:5000/` (docker) or
 ```
 Navigate to `http://localhost:5000/` (docker) or
 `http://192.168.59.103:5000/` (boot2docker) in a web browser.
-
-##Run local
-```
-python routs.py
-```
-Navigate to `http://0.0.0.0:80/` in a web browser.
 
 The nodes can be moved by dragging them around and be collapsed by
 clicking on them. Clicking a second time will re-expand the nodes.
