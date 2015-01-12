@@ -3,7 +3,8 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from gz_classes import *
 
 app = Flask(__name__, instance_relative_config=True)
-app.config.from_pyfile('gz_nodes.cfg', silent=True)
+#app.config.from_pyfile('gz_nodes.cfg', silent=True)
+app.config.from_envvar('APPLICATION_SETTINGS', silent=True)
 
 db=SQLAlchemy(app)
 db.Model.metadata.reflect(db.get_engine(app,'gz2'))
