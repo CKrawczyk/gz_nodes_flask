@@ -14,7 +14,36 @@ information needed to connect to the database (with databases named `gz2` and `g
 `SQLALCHEMY_DATABASE_URI =mysql+mysqlconnector://username:password@host:port/gz2`
 `SQLALCHEMY_BINDS = {'gz2': mysql+mysqlconnector://username:password@host:port/gz2, 'gz3': mysql+mysqlconnector://username:password@host:port/gz3`
 
-To run locally `python routs.py` and navigate to `http://127.0.0.1:5000/` in a web browser.
+*NOTE*: If using docker set host to the result of `"ip route
+ show 0.0.0.0/0 | grep -Eo 'via \S+' | awk '{ print \$2 }'"`. If using
+ boot2docker set host to `192.168.59.3`. In either case make sure
+ mysql is set up to accept connections from `username` on this host
+ address (see
+ http://stackoverflow.com/questions/1559955/host-xxx-xx-xxx-xxx-is-not-allowed-to-connect-to-this-mysql-server
+ for more info on how to do this).
+
+##Run using fig
+```
+fig build
+fig up
+```
+Navigate to `http://localhost:5000/` (docker) or
+`http://192.168.59.103:5000/` (boot2docker) in a web browser.
+
+
+##Run using docker
+```
+./gz_build.sh
+./gz_up.sh
+```
+Navigate to `http://localhost:5000/` (docker) or
+`http://192.168.59.103:5000/` (boot2docker) in a web browser.
+
+##Run local
+```
+python routs.py
+```
+Navigate to `http://0.0.0.0:80/` in a web browser.
 
 The nodes can be moved by dragging them around and be collapsed by
 clicking on them. Clicking a second time will re-expand the nodes.
