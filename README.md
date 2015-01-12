@@ -17,8 +17,8 @@ SQLALCHEMY_BINDS ={'gz2':mysql+mysqlconnector://username:password@host:port/gz2,
     'gz3':mysql+mysqlconnector://username:password@host:port/gz3}
 ```
 
-*NOTE*: If using docker set host to the result of `"ip route
- show 0.0.0.0/0 | grep -Eo 'via \S+' | awk '{ print \$2 }'"`. If using
+*NOTE*: If using docker set host to the result of `ip route
+ show 0.0.0.0/0 | grep -Eo 'via \S+' | awk '{ print $2 }'`. If using
  boot2docker set host to `192.168.59.3`. In either case make sure
  mysql is set up to accept connections from `username` on this host
  address (see
