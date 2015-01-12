@@ -42,6 +42,7 @@ Navigate to `http://localhost:5000/` (docker) or
 Navigate to `http://localhost:5000/` (docker) or
 `http://192.168.59.103:5000/` (boot2docker) in a web browser.
 
+##Node tree properties
 The nodes can be moved by dragging them around and be collapsed by
 clicking on them. Clicking a second time will re-expand the nodes.
 The nodes will try to arrange themselves so the ones with the most votes
