@@ -1,1 +1,1 @@
-docker build -t web .
+docker build -t gznodesflask_web .
