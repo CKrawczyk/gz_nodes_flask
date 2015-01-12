@@ -14,7 +14,7 @@ information needed to connect to the database (with databases named `gz2` and `g
 ```
 SQLALCHEMY_DATABASE_URI =mysql+mysqlconnector://username:password@host:port/gz2
 SQLALCHEMY_BINDS ={'gz2':mysql+mysqlconnector://username:password@host:port/gz2,
-                                     'gz3':mysql+mysqlconnector://username:password@host:port/gz3}
+    'gz3':mysql+mysqlconnector://username:password@host:port/gz3}
 ```
 
 *NOTE*: If using docker set host to the result of `"ip route
