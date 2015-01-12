@@ -1,4 +1,7 @@
 web:
   build: .
+  command: python routs.py
+  environment:
+  - "APPLICATION_SETTINGS=/usr/src/app/instance/gz_nodes.cfg"
   ports:
   - "5000:80"
