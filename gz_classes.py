@@ -1,4 +1,5 @@
 from sqlalchemy.sql import func
+from random import randint
 import re
 
 #======================================================
@@ -171,7 +172,9 @@ class GZ2(Connect):
         return result
     def get_rand_obj(self):
         a=self.BC.assets
-        result=self.session.query(a.name,a.id,a.ra,a.dec,a.location).order_by(func.rand()).first()
+        #there are 355,990 assets in GZ2, no gaps in the id number (makes life easy)
+        rand_id=randint(1,355990)
+        result=self.session.query(a.name,a.id,a.ra,a.dec,a.location).filter(a.id==rand_id).first()
         return result
     def get_vote_path(self,gal_id):
         a=self.BC.annotations
@@ -216,7 +219,9 @@ class GZ3(Connect):
         return result
     def get_rand_obj(self):
         a=self.BC.assets
-        result=self.session.query(a.name,a.id,a.ra,a.dec,a.location).order_by(func.rand()).first()
+        #there are 169,944 assets in GZ3, no gaps in the id number (makes life easy)
+        rand_id=randint(1,169944)
+        result=self.session.query(a.name,a.id,a.ra,a.dec,a.location).filter(a.id==rand_id).first()
         return result
     def get_vote_path(self,gal_id):
         a=self.BC.annotations

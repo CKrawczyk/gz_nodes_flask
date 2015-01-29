@@ -12,7 +12,7 @@ BC2=get_tables(db,'gz2')
 db.Model.metadata.reflect(db.get_engine(app,'gz3'),extend_existing=True)
 BC3=get_tables(db,'gz3')
 db_dict={'gz2':GZ2(db,app,BC2),
-            'gz3':GZ3(db,app,BC3)}
+               'gz3':GZ3(db,app,BC3)}
 
 @app.route('/')
 def index():
