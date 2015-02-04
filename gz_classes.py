@@ -122,9 +122,7 @@ class Connect:
                         i=i[:-1]
                     for key in zip(i[:-1],i[1:]):
                         path_dict[key]=path_dict.get(key,0)+1
-        self.odd_list=[]
-        for key,value in odd_dict.iteritems():
-            self.odd_list.append([key,value])
+        self.odd_list=map(list,odd_dict.items())
         self.odd_list.sort(key=lambda x: x[1])
         self.odd_list=self.odd_list[::-1]
         self.odd_list=[{'name':k[0], 'value':k[1]} for k in self.odd_list]
