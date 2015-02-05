@@ -23,11 +23,13 @@ db_dict={'gz2':GZ2(db,app,BC2),
 def index():
     return render_template('index.html')
 
-@app.route('/_get_random')
-def get_random(table='gz2'):
-    table = request.args.get('table', 'gz2', type=str)
-    gal_name,gal_id,ra_gal,dec_gal,url=db_dict[table].get_rand_obj()
-    return jsonify(result={"gal_name":gal_name})
+# random route is depreciated in the js code
+# .run in each class now takes 'random' as and argument
+#@app.route('/_get_random')
+#def get_random(table='gz2'):
+#    table = request.args.get('table', 'gz2', type=str)
+#    gal_name,gal_id,ra_gal,dec_gal,url=db_dict[table].get_rand_obj()
+#    return jsonify(result={"gal_name":gal_name})
 
 @app.route('/_get_path')
 def get_path():

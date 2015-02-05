@@ -203,11 +203,12 @@ function run_default() {
 
 // random galaxy
 function random_gal() {
-    $.getJSON($SCRIPT_ROOT + '/_get_random', {
+    updateData('random')
+    /*$.getJSON($SCRIPT_ROOT + '/_get_random', {
         table: "gz"+zoo,
     }, function(d) {
 	    updateData(d.result.gal_name)
-    });
+    });*/
 };
 
 // function that takes in a galaxy id and makes the node tree

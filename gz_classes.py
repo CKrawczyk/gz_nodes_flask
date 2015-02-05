@@ -79,6 +79,8 @@ class Connect:
     def get_vote_path(self):
         pass
     def get_nodes(self):
+        # This funciton is not needed since this is not hard coded below
+        # This hard coding reduces server load and page load time
         answers=self.get_answers()
         # order: answer, question, answer_id, group_id
         node_names=['name', 'question', 'answer_id']
@@ -147,9 +149,9 @@ class GZ2(Connect):
     def __init__(self,db,app,BC):
         self.bind=db.get_engine(app,'gz2')
         Connect.__init__(self,BC,db.sessionmaker(bind=self.bind)())
-        self.group_id=[0,1,2,4,2,3,3,3,3,3,3,3,3,3,5,5,1,1,1,5,5,5,5,5,5,2,2,2,3,3,3,3,3,3,3,3,3,5]
+        #self.group_id=[0,1,2,4,2,3,3,3,3,3,3,3,3,3,5,5,1,1,1,5,5,5,5,5,5,2,2,2,3,3,3,3,3,3,3,3,3,5]
         self.vp=gz2_valid_path
-        self.get_nodes()
+        self.nodes=gz2_nodes
     def get_answers(self):
         answers=self.BC.answers
         tasks=self.BC.tasks
@@ -190,10 +192,10 @@ class GZ3(Connect):
     def __init__(self,db,app,BC):
         self.bind=db.get_engine(app,'gz3')
         Connect.__init__(self,BC,db.sessionmaker(bind=self.bind)())
-        self.group_id=[0,1,2,5,2,3,3,3,3,3,3,3,3,3,6,6,1,1,1,6,6,6,6,6,6,2,2,2,3,3,3,3,3,3,3,3,3,6,4,2,
-                       4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4]
+        #self.group_id=[0,1,2,5,2,3,3,3,3,3,3,3,3,3,6,6,1,1,1,6,6,6,6,6,6,2,2,2,3,3,3,3,3,3,3,3,3,6,4,2,
+        #              4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4]
         self.vp=gz3_valid_path
-        self.get_nodes()
+        self.nodes=gz3_nodes
     def get_answers(self):
         a1=self.BC.answer_translations
         t=self.BC.task_translations
@@ -334,3 +336,108 @@ gz3_valid_path={0:[1,2,3],
                 58:[14,15],
                 59:[6,7],
                 60:[16,17,18,55,56]}
+
+#hardcode the nodes list so fewer sql calls are made to the server
+gz2_nodes=[
+    {"group": 0, "question": "", "name": "All", "answer_id": 0},
+    {"group": 1, "question": "Is the galaxy simply smooth and rounded, with no sign of a disk?", "name": "Smooth", "answer_id": 1},
+    {"group": 2, "question": "Is the galaxy simply smooth and rounded, with no sign of a disk?", "name": "Features or disk", "answer_id": 2},
+    {"group": 4, "question": "Is the galaxy simply smooth and rounded, with no sign of a disk?", "name": "Star or artifact", "answer_id": 3},
+    {"group": 2, "question": "Could this be a disk viewed edge-on?", "name": "Yes", "answer_id": 4},
+    {"group": 3, "question": "Could this be a disk viewed edge-on?", "name": "No", "answer_id": 5},
+    {"group": 3, "question": "Is there a sign of a bar feature through the centre of the galaxy?", "name": "Bar", "answer_id": 6},
+    {"group": 3, "question": "Is there a sign of a bar feature through the centre of the galaxy?", "name": "No bar", "answer_id": 7},
+    {"group": 3, "question": "Is there any sign of a spiral arm pattern?", "name": "Spiral", "answer_id": 8},
+    {"group": 3, "question": "Is there any sign of a spiral arm pattern?", "name": "No spiral", "answer_id": 9},
+    {"group": 3, "question": "How prominent is the central bulge, compared with the rest of the galaxy?", "name": "No bulge", "answer_id": 10},
+    {"group": 3, "question": "How prominent is the central bulge, compared with the rest of the galaxy?", "name": "Just noticeable", "answer_id": 11},
+    {"group": 3, "question": "How prominent is the central bulge, compared with the rest of the galaxy?", "name": "Obvious", "answer_id": 12},
+    {"group": 3, "question": "How prominent is the central bulge, compared with the rest of the galaxy?", "name": "Dominant", "answer_id": 13},
+    {"group": 5, "question": "Is there anything odd?", "name": "Yes", "answer_id": 14},
+    {"group": 5, "question": "Is there anything odd?", "name": "No", "answer_id": 15},
+    {"group": 1, "question": "How rounded is it?", "name": "Completely round", "answer_id": 16},
+    {"group": 1, "question": "How rounded is it?", "name": "In between", "answer_id": 17},
+    {"group": 1, "question": "How rounded is it?", "name": "Cigar shaped", "answer_id": 18},
+    {"group": 5, "question": "Is the odd feature a ring, or is the galaxy disturbed or irregular?", "name": "Ring", "answer_id": 19},
+    {"group": 5, "question": "Is the odd feature a ring, or is the galaxy disturbed or irregular?", "name": "Lens or arc", "answer_id": 20},
+    {"group": 5, "question": "Is the odd feature a ring, or is the galaxy disturbed or irregular?", "name": "Disturbed", "answer_id": 21},
+    {"group": 5, "question": "Is the odd feature a ring, or is the galaxy disturbed or irregular?", "name": "Irregular", "answer_id": 22},
+    {"group": 5, "question": "Is the odd feature a ring, or is the galaxy disturbed or irregular?", "name": "Other", "answer_id": 23},
+    {"group": 5, "question": "Is the odd feature a ring, or is the galaxy disturbed or irregular?", "name": "Merger", "answer_id": 24},
+    {"group": 2, "question": "Does the galaxy have a bulge at its centre? If so, what shape?", "name": "Rounded", "answer_id": 25},
+    {"group": 2, "question": "Does the galaxy have a bulge at its centre? If so, what shape?", "name": "Boxy", "answer_id": 26},
+    {"group": 2, "question": "Does the galaxy have a bulge at its centre? If so, what shape?", "name": "No bulge", "answer_id": 27},
+    {"group": 3, "question": "How tightly wound do the spiral arms appear?", "name": "Tight", "answer_id": 28},
+    {"group": 3, "question": "How tightly wound do the spiral arms appear?", "name": "Medium", "answer_id": 29},
+    {"group": 3, "question": "How tightly wound do the spiral arms appear?", "name": "Loose", "answer_id": 30},
+    {"group": 3, "question": "How many spiral arms are there?", "name": "1", "answer_id": 31},
+    {"group": 3, "question": "How many spiral arms are there?", "name": "2", "answer_id": 32},
+    {"group": 3, "question": "How many spiral arms are there?", "name": "3", "answer_id": 33},
+    {"group": 3, "question": "How many spiral arms are there?", "name": "4", "answer_id": 34},
+    {"answer": "", "group": -1, "question": "", "answer_id": 35},
+    {"group": 3, "question": "How many spiral arms are there?", "name": "More than 4", "answer_id": 36},
+    {"group": 3, "question": "How many spiral arms are there?", "name": "Can't tell", "answer_id": 37},
+    {"group": 5, "question": "Is the odd feature a ring, or is the galaxy disturbed or irregular?", "name": "Dust lane", "answer_id": 38}]
+
+gz3_nodes=[
+    {"group": 0, "question": "", "name": "All", "answer_id": 0},
+    {"group": 1, "question": "Is the galaxy simply smooth and rounded, with no sign of a disk?", "name": "Smooth", "answer_id": 1},
+    {"group": 2, "question": "Is the galaxy simply smooth and rounded, with no sign of a disk?", "name": "Features or disk", "answer_id": 2},
+    {"group": 5, "question": "Is the galaxy simply smooth and rounded, with no sign of a disk?", "name": "Star or artifact", "answer_id": 3},
+    {"group": 2, "question": "Could this be a disk viewed edge-on?", "name": "Yes", "answer_id": 4},
+    {"group": 3, "question": "Could this be a disk viewed edge-on?", "name": "No", "answer_id": 5},
+    {"group": 3, "question": "Is there a sign of a bar feature through the centre of the galaxy?", "name": "Bar", "answer_id": 6},
+    {"group": 3, "question": "Is there a sign of a bar feature through the centre of the galaxy?", "name": "No bar", "answer_id": 7},
+    {"group": 3, "question": "Is there any sign of a spiral arm pattern?", "name": "Spiral", "answer_id": 8},
+    {"group": 3, "question": "Is there any sign of a spiral arm pattern?", "name": "No spiral", "answer_id": 9},
+    {"group": 3, "question": "How prominent is the central bulge, compared with the rest of the galaxy?", "name": "No bulge", "answer_id": 10},
+    {"group": 3, "question": "How prominent is the central bulge, compared with the rest of the galaxy?", "name": "Just noticeable", "answer_id": 11},
+    {"group": 3, "question": "How prominent is the central bulge, compared with the rest of the galaxy?", "name": "Obvious", "answer_id": 12},
+    {"group": 3, "question": "How prominent is the central bulge, compared with the rest of the galaxy?", "name": "Dominant", "answer_id": 13},
+    {"group": 6, "question": "Is there anything odd?", "name": "Yes", "answer_id": 14},
+    {"group": 6, "question": "Is there anything odd?", "name": "No", "answer_id": 15},
+    {"group": 1, "question": "How rounded is it?", "name": "Completely round", "answer_id": 16},
+    {"group": 1, "question": "How rounded is it?", "name": "In between", "answer_id": 17},
+    {"group": 1, "question": "How rounded is it?", "name": "Cigar shaped", "answer_id": 18},
+    {"group": 6, "question": "Is the odd feature a ring, or is the galaxy disturbed or irregular?", "name": "Ring", "answer_id": 19},
+    {"group": 6, "question": "Is the odd feature a ring, or is the galaxy disturbed or irregular?", "name": "Lens or arc", "answer_id": 20},
+    {"group": 6, "question": "Is the odd feature a ring, or is the galaxy disturbed or irregular?", "name": "Disturbed", "answer_id": 21},
+    {"group": 6, "question": "Is the odd feature a ring, or is the galaxy disturbed or irregular?", "name": "Irregular", "answer_id": 22},
+    {"group": 6, "question": "Is the odd feature a ring, or is the galaxy disturbed or irregular?", "name": "Other", "answer_id": 23},
+    {"group": 6, "question": "Is the odd feature a ring, or is the galaxy disturbed or irregular?", "name": "Merger", "answer_id": 24},
+    {"group": 2, "question": "Does the galaxy have a bulge at its centre? If so, what shape?", "name": "Rounded", "answer_id": 25},
+    {"group": 2, "question": "Does the galaxy have a bulge at its centre? If so, what shape?", "name": "Boxy", "answer_id": 26},
+    {"group": 2, "question": "Does the galaxy have a bulge at its centre? If so, what shape?", "name": "No bulge", "answer_id": 27},
+    {"group": 3, "question": "How tightly wound do the spiral arms appear?", "name": "Tight", "answer_id": 28},
+    {"group": 3, "question": "How tightly wound do the spiral arms appear?", "name": "Medium", "answer_id": 29},
+    {"group": 3, "question": "How tightly wound do the spiral arms appear?", "name": "Loose", "answer_id": 30},
+    {"group": 3, "question": "How many spiral arms are there?", "name": "1", "answer_id": 31},
+    {"group": 3, "question": "How many spiral arms are there?", "name": "2", "answer_id": 32},
+    {"group": 3, "question": "How many spiral arms are there?", "name": "3", "answer_id": 33},
+    {"group": 3, "question": "How many spiral arms are there?", "name": "4", "answer_id": 34},
+    {"answer": "", "group": -1, "question": "", "answer_id": 35},
+    {"group": 3, "question": "How many spiral arms are there?", "name": "More than 4", "answer_id": 36},
+    {"group": 3, "question": "How many spiral arms are there?", "name": "Can't tell", "answer_id": 37},
+    {"group": 6, "question": "Is the odd feature a ring, or is the galaxy disturbed or irregular?", "name": "Dust lane", "answer_id": 38},
+    {"group": 4, "question": "Does the galaxy have a mostly clumpy appearance?", "name": "Yes", "answer_id": 39},
+    {"group": 2, "question": "Does the galaxy have a mostly clumpy appearance?", "name": "No", "answer_id": 40},
+    {"group": 4, "question": "Are there multiple clumps?", "name": "Yes", "answer_id": 41},
+    {"group": 4, "question": "Are there multiple clumps?", "name": "No", "answer_id": 42},
+    {"group": 4, "question": "Is there one clump which is clearly brighter than the others?", "name": "Yes", "answer_id": 43},
+    {"group": 4, "question": "Is there one clump which is clearly brighter than the others?", "name": "No", "answer_id": 44},
+    {"group": 4, "question": "Is the brightest clump central to the galaxy?", "name": "Yes", "answer_id": 45},
+    {"group": 4, "question": "Is the brightest clump central to the galaxy?", "name": "No", "answer_id": 46},
+    {"group": 4, "question": "Do the clumps appear in a straight line, a chain, or a cluster?", "name": "Straight Line", "answer_id": 47},
+    {"group": 4, "question": "Do the clumps appear in a straight line, a chain, or a cluster?", "name": "Chain", "answer_id": 48},
+    {"group": 4, "question": "Do the clumps appear in a straight line, a chain, or a cluster?", "name": "Cluster", "answer_id": 49},
+    {"group": 4, "question": "How many clumps are there?", "name": "2", "answer_id": 50},
+    {"group": 4, "question": "How many clumps are there?", "name": "3", "answer_id": 51},
+    {"group": 4, "question": "How many clumps are there?", "name": "4", "answer_id": 52},
+    {"group": 4, "question": "How many clumps are there?", "name": "More than 4", "answer_id": 53},
+    {"group": 4, "question": "How many clumps are there?", "name": "Can't tell", "answer_id": 54},
+    {"group": 4, "question": "Does the galaxy appear symmetrical?", "name": "Yes", "answer_id": 55},
+    {"group": 4, "question": "Does the galaxy appear symmetrical?", "name": "No", "answer_id": 56},
+    {"group": 4, "question": "Do the clumps appear to be embedded within a larger object?", "name": "Yes", "answer_id": 57},
+    {"group": 4, "question": "Do the clumps appear to be embedded within a larger object?", "name": "No", "answer_id": 58},
+    {"group": 4, "question": "Do the clumps appear in a straight line, a chain, or a cluster?", "name": "Spiral", "answer_id": 59},
+    {"group": 4, "question": "How many clumps are there?", "name": "1", "answer_id": 60}]
