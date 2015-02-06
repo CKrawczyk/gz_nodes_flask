@@ -25,6 +25,19 @@ SQLALCHEMY_BINDS ={'gz2':mysql+mysqlconnector://username:password@host:port/gz2,
  http://stackoverflow.com/questions/1559955/host-xxx-xx-xxx-xxx-is-not-allowed-to-connect-to-this-mysql-server
  for more info on how to do this).
 
+This app also connects ot a local MongDB database containing the data
+for Galaxy Zoo 4 (with databases named `galaxy_zoo.galaxy_zoo_subjects` and `galaxy_zoo.galaxy_zoo_classifications`).
+These databases should have the following indexes added for faster queries:
+```
+>>> mongo
+>>> use galaxy_zoo
+>>> db.galaxy_zoo_subjects.ensureIndex({‘coords’: ‘2d’, ‘metadata.survey’: 1},{‘min': -90, ‘max': 360})
+>>> db.galaxy_zoo_subjects.ensureIndex({‘metadata.survey’: 1, ‘random’: 1})
+>>> db.galaxy_zoo_classifications.ensureIndex({’subject_ids’:1})
+```
+This host ip address from above should also be used in line 9 of `gz_mongo.py`
+so the app can connect to Mongo.
+
 ##Run using fig
 ```
 fig build

@@ -6,7 +6,8 @@ import gz4_sloan_ukidss as sloan_ukidss
 import gz4_ferengi as ferengi
 import gz4_candels as candels
 
-client=MongoClient('localhost', 27017)
+client=MongoClient('192.168.59.3', 27017)
+#client=MongoClient('localhost',27017)
 db=client['galaxy_zoo']
 subjects=db['galaxy_zoo_subjects']
 classifications=db['galaxy_zoo_classifications']

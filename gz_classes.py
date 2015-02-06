@@ -190,7 +190,7 @@ class GZ2(Connect):
         return [['All','',0]]+map(list,result)
     def get_nearest_obj(self,ra_in,dec_in,size=2):
         a=self.BC.assets
-        #find a 5 deg bounding box to speed up search
+        #find a bounding box to speed up search (size depended on search regon)
         if (ra_in<60) or (ra_in>308.5):
             if (dec_in+size)<-1:
                 size=abs(dec_in+1)

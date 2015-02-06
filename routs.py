@@ -4,8 +4,8 @@ from gz_classes import *
 from gz_mongo import *
 
 app = Flask(__name__, instance_relative_config=True)
-app.config.from_pyfile('gz_nodes_local.cfg', silent=True)
-#app.config.from_envvar('APPLICATION_SETTINGS', silent=True)
+#app.config.from_pyfile('gz_nodes_local.cfg', silent=True)
+app.config.from_envvar('APPLICATION_SETTINGS', silent=True)
 
 db=SQLAlchemy(app)
 db.Model.metadata.reflect(db.get_engine(app,'gz2'))
@@ -38,5 +38,6 @@ def get_path():
     return jsonify(result=db_dict[table].run(argv))
 
 if __name__=="__main__":
-    app.debug = True
-    app.run()
+    #app.debug = True
+    #app.run()
+    app.run(host='0.0.0.0',port=80)
