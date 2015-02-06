@@ -201,7 +201,6 @@ class GZ2(Connect):
                 size=abs(dec_in+3)
             elif (dec_in-size)>76:
                 size=abs(dec_in-76)
-        print size
         box=geo_bounding_box(ra_in,dec_in,size=size)
         #this distance is correct up to multiplications factors (order is correct)
         dis=func.asin(func.sqrt(func.power(func.sin(0.5*func.radians(dec_in-a.dec)),2) + func.cos(func.radians(dec_in))*func.cos(func.radians(a.dec))*func.power(func.sin(.5*func.radians(ra_in-a.ra)),2)))
