@@ -188,9 +188,20 @@ class GZ2(Connect):
                     join(tasks, answers.task_id==tasks.id).\
                     order_by(answers.id.asc()).all()
         return [['All','',0]]+map(list,result)
-    def get_nearest_obj(self,ra_in,dec_in,size=5):
+    def get_nearest_obj(self,ra_in,dec_in,size=2):
         a=self.BC.assets
         #find a 5 deg bounding box to speed up search
+        if (ra_in<60) or (ra_in>308.5):
+            if (dec_in+size)<-1:
+                size=abs(dec_in+1)
+            elif (dec_in-size)>1:
+                size=abs(dec_in-1)
+        else:
+            if (dec_in+size)<-3:
+                size=abs(dec_in+3)
+            elif (dec_in-size)>76:
+                size=abs(dec_in-76)
+        print size
         box=geo_bounding_box(ra_in,dec_in,size=size)
         #this distance is correct up to multiplications factors (order is correct)
         dis=func.asin(func.sqrt(func.power(func.sin(0.5*func.radians(dec_in-a.dec)),2) + func.cos(func.radians(dec_in))*func.cos(func.radians(a.dec))*func.power(func.sin(.5*func.radians(ra_in-a.ra)),2)))
@@ -244,19 +255,10 @@ class GZ3(Connect):
                     filter(t.locale=='en').\
                     order_by(a1.answer_id.asc()).all()
         return [['All','',0]]+map(list,result)
-    def get_nearest_obj(self,ra_in,dec_in,size=1):
+    def get_nearest_obj(self,ra_in,dec_in,size=5):
         a=self.BC.assets
         #this distance is correct up to multiplications factors (order is correct)
         dis=func.asin(func.sqrt(func.power(func.sin(0.5*func.radians(dec_in-a.dec)),2) + func.cos(func.radians(dec_in))*func.cos(func.radians(a.dec))*func.power(func.sin(.5*func.radians(ra_in-a.ra)),2)))
-        #find a bounding box to reduce search time (does not help with gz3... odd)
-        #box=geo_bounding_box(ra_in,dec_in,size=size)
-        #if isinstance(box[0],list):
-            #the search wraps around 360
-        #    result=self.session.query(a.name,a.id,a.ra,a.dec,a.location).filter(between(a.dec,box[1][0],box[1][1])).filter((between(a.ra,box[0][0][0],box[0][0][1]))|(between(a.ra,box[0][1][0],box[0][1][1]))).order_by(dis.asc()).first()
-        #else:
-        #    result=self.session.query(a.name,a.id,a.ra,a.dec,a.location).filter(between(a.ra,box[0][0],box[0][1])).filter(between(a.dec,box[1][0],box[1][1])).order_by(dis.asc()).first()
-        #if result is None:
-        #    result=self.get_nearest_obj(ra_in,dec_in,size=size+20)
         result=self.session.query(a.name,a.id,a.ra,a.dec,a.location).order_by(dis.asc()).first()
         return result
     def get_obj_by_id(self,name_in):
