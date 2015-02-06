@@ -220,7 +220,6 @@ function updateData(gal_id){
     d3.select("#slider_charge").on("input", function() { update_charge(+this.value); })
     d3.select("#slider_strength").on("input", function() { update_strength(+this.value); })
     d3.select("#slider_friction").on("input", function() { update_friction(+this.value); })
-    d3.select("#reset_button").on("click", reset_data)
 
     function update_charge(new_val){
 	    d3.select("#slider_charge_value").text(new_val);
@@ -245,10 +244,6 @@ function updateData(gal_id){
 	    force.friction(1-new_val);
 	    force.stop();
 	    force.start();
-    }
-
-    function reset_data(){
-	    updateData(gal_id);
     }
 
     // add the draw window
@@ -287,6 +282,13 @@ function updateData(gal_id){
 	    // Add text for RA and DEC
 	    d3.select("#ra_dec")
 	        .text("RA: " + parseFloat(answers.ra).toFixed(3) + ", DEC:" + parseFloat(answers.dec).toFixed(3))
+
+        // make sure reset button returns same object
+        function reset_data(){
+	        updateData(answers.gal_name);
+        }
+        d3.select("#reset_button").on("click", reset_data)
+        
 	    // make sure dropdown list matches this id (useful for refresh)
 	    d3.select("#galaxies").property("value",answers.gal_name)
 	    root = answers;
