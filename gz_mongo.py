@@ -65,7 +65,7 @@ class GZ4_base:
                 s=subjects.find_one({'zooniverse_id':argv[0]})
             else:
                 ra,dec=map(float,argv)
-                s=subjects.find_one({'coords':{'$near':[ra,dec]}, 'metadata.survey':self.survey_name})
+                s=subjects.find_one({'location_geo':{'$near':{'$geometry':{ 'type' : 'Point' , 'coordinates' :[ra-180,dec]}}}, 'metadata.survey':self.survey_name})
         if self.debug:
             pprint(s)
         self.get_links(s['_id'])

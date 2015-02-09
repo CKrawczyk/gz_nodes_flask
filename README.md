@@ -27,13 +27,15 @@ SQLALCHEMY_BINDS ={'gz2':mysql+mysqlconnector://username:password@host:port/gz2,
 
 This app also connects ot a local MongDB database containing the data
 for Galaxy Zoo 4 (with databases named `galaxy_zoo.galaxy_zoo_subjects` and `galaxy_zoo.galaxy_zoo_classifications`).
+The script `gz_mongo_update_loc.py` should be run to add a `location_geo` field to each subject. This field
+converts [RA,DEC] to an "earth like" [log,lat] system so `2dsphere` indexing can be used.
 These databases should have the following indexes added for faster queries:
 ```
 >>> mongo
 >>> use galaxy_zoo
->>> db.galaxy_zoo_subjects.ensureIndex({‘coords’: ‘2d’, ‘metadata.survey’: 1},{‘min': -90, ‘max': 360})
+>>> db.galaxy_zoo_subjects.ensureIndex({‘location_geo’: ‘2dsphere’, ‘metadata.survey’: 1})
 >>> db.galaxy_zoo_subjects.ensureIndex({‘metadata.survey’: 1, ‘random’: 1})
->>> db.galaxy_zoo_classifications.ensureIndex({’subject_ids’:1})
+>>> db.galaxy_zoo_classifications.ensureIndex({‘subject_ids’:1})
 ```
 This host ip address from above should also be used in line 9 of `gz_mongo.py`
 so the app can connect to Mongo.
