@@ -40,6 +40,9 @@ These databases should have the following indexes added for faster queries:
 This host ip address from above should also be used in line 9 of `gz_mongo.py`
 so the app can connect to Mongo.
 
+Docker is set up to run the flask app on an internal Apache/mod_wsgi server.
+See http://blog.dscpl.com.au/2014/12/hosting-python-wsgi-applications-using.html for more info.
+
 ##Run using fig
 ```
 fig build

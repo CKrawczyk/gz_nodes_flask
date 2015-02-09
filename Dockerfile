@@ -1,7 +1,3 @@
-FROM google/python
-ADD . /usr/src/app/
-WORKDIR /usr/src/app/
-RUN pip install -r requirements.txt
+FROM grahamdumpleton/mod-wsgi-docker:python-2.7-onbuild
 RUN pip install --allow-external mysql-connector-python mysql-connector-python
-EXPOSE 80
-CMD python routs.py
+CMD ["gz_nodes_wsgi.py"]
