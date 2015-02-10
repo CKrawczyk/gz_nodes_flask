@@ -2,6 +2,8 @@ from sqlalchemy.sql import func, between
 from random import randint
 import re
 import math
+import warnings
+warnings.simplefilter("ignore")
 
 #======================================================
 #auto generate table classes from the existing database
