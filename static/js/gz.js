@@ -17,7 +17,7 @@ var margin = {top: 1, right: 1, bottom: 1, left: 1},
 
 // Re-draw when window size is changed
 var current_gal;
-window.onresize = function() {
+function resize_window() {
     val = parseInt(d3.select('#tree').style('width'))
     if (val!=W){
         W=val;
@@ -25,6 +25,13 @@ window.onresize = function() {
         height = .5*W - margin.top - margin.bottom;
         updateData(current_gal);
     }
+}
+
+// wait for re-size event to be over before re-drawing
+var doit;
+window.onresize = function() {
+    clearTimeout(doit);
+    doit = setTimeout(resize_window, 100);
 }
 
 // Hook up buttons
