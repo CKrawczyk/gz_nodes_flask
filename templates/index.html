@@ -2,91 +2,133 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <link id="css" type="text/css" rel="stylesheet" href="/static/css/style.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/static/css/style.css">
+    <link id="css" type="text/css" rel="stylesheet" href="/static/css/light_style.css"/>
     <script src="/static/js/jquery-1.11.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
   </head>
-<body>
-<header id="header">
-
-<div class="radio-tabs" id="color_tabs">
-  <input class="tab_old" type="radio" title="Dark"  name="color_tab" id="dark" />
-  <input class="tab_old" type="radio" title="Light" name="color_tab" id="light" checked />
-  <div class="tabs">
-    <label for="dark"  id="dark_tab"  class="tab">Dark</label>
-    <label for="light" id="light_tab" class="tab">Light</label>
-  </div>
-</div>
-
-</header>
-<h1>Node Tree: Galaxy Zoo</h1>
-
-<div class="radio-tabs" id="zoo_tabs">
-  <input class="tab_old" type="radio" title="Zoo 1" name="zoo_tab" id="zoo_1" disabled />
-  <input class="tab_old" type="radio" title="Zoo 2" name="zoo_tab" id="zoo_2" checked />
-  <input class="tab_old" type="radio" title="Zoo 3" name="zoo_tab" id="zoo_3" />
-  <input class="tab_old" type="radio" title="Zoo 4 Sloan"     name="zoo_tab" id="zoo_4s" />
-  <input class="tab_old" type="radio" title="Zoo 4 Candels" name="zoo_tab" id="zoo_4c" />
-  <input class="tab_old" type="radio" title="Zoo 4 UKIDSS"  name="zoo_tab" id="zoo_4u" />
-  <input class="tab_old" type="radio" title="Zoo 4 Ferengi"  name="zoo_tab" id="zoo_4f" />
-  <div class="tabs">
-    <label for="zoo_1" id="zoo1_tab" class="tab">GZ 1</label>
-    <label for="zoo_2" id="zoo2_tab" class="tab">GZ 2</label>
-    <label for="zoo_3" id="zoo3_tab" class="tab">GZ 3 Hubble</label>
-    <label for="zoo_4s" id="zoo4s_tab" class="tab">GZ 4 Sloan</label>
-    <label for="zoo_4c" id="zoo4c_tab" class="tab">GZ 4 Candels</label>
-    <label for="zoo_4u" id="zoo4u_tab" class="tab">GZ 4 UKIDSS</label>
-    <label for="zoo_4f" id="zoo4f_tab" class="tab">GZ 4 Ferengi</label>
-  </div>
-</div>
-
-<div class="radio-tabs" id="weight_tabs">
-  <input class="tab_old" type="radio" title="Raw"      name="weight_tab" id="weight_raw" checked />
-  <input class="tab_old" type="radio" title="Weighted" name="weight_tab" id="weight_weighted" />
-  <input class="tab_old" type="radio" title="Bias"     name="weight_tab" id="weight_bias"  disabled/>  
-  <div class="tabs">
-    <label for="weight_raw"      id="raw_tab"      class="tab">Raw Votes</label>
-    <label for="weight_weighted" id="weighted_tab" class="tab">Weighted Votes</label>
-    <label for="weight_bias"     id="bias_tab"     class="tab">Bias Corrected Votes</label>
-  </div>
-</div>
-<br style="clear:both;" />
-
-<div id="tree">
-  <div id="sequence"></div>
-  <div id="RA_DEC"><span id="ra_dec"></span></div>
-  <div id="body"></div>
-  <div id="odd"></div>
-  
-  <div id="sliders">
-  <div class="plot_controls">
-    <label for="slider_charge">Charge: <span id="slider_charge_value">...</span></label>
-    <input type="range" min="1" max="5" value="2.5" step="0.01" id="slider_charge" />
-  </div>
-  <div class="plot_controls">
-    <label for="slider_strength">Link Strength: <span id="slider_strength_value">...</span></label>
-    <input type="range" min="0" max="1" value="1" step="0.01" id="slider_strength" />
-  </div>
-  <div class="plot_controls">
-    <label for="slider_friction">Friction: <span id="slider_friction_value">...</span></label>
-    <input type="range" min="0" max="1" value="0.2" step="0.01" id="slider_friction" />
-  </div>
-  <div class="plot_controls">
-    <button type="button" id="reset_button">Reset</button>
-  </div>
-  <br style="clear:both;" />
-  </div>
-
-</div>
-
-<footer>
-  <aside>Feb 6, 2014</aside>
-  <a href="http://wwww.zooniverse.org" rel="author">Zooniverse</a>
-</footer>
-
-<script type=text/javascript>
-  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-</script>
-<script src="/static/js/d3.min.js"></script>
-<script src="/static/js/gz.js"></script>
-</body>
+  <body>
+    <header>
+      <div class="container" id="header">
+        <div class="btn-group pull-right" data-toggle="buttons" id="color_buttons">
+          <label class="btn btn-primary" id="dark_lab">
+            <input type="radio" name="color_tab" id="dark" autocomplete="off" value="dark"> Dark
+          </label>
+          <label class="btn btn-primary active" id="light_lab">
+            <input type="radio" name="color_tab" id="light" autocomplete="off" value="light" checked> Light
+          </label>
+        </div>
+      </div>
+    </header>
+    
+    <div class="container" id="body_container">
+      <div class="row">
+        <div class="col-md-7">
+          <h1>Node Tree: Galaxy Zoo</h1>
+        </div>
+        <div class="col-md-5">
+          <div class="input-group" id="search_buttons">
+            <input type="text" class="form-control" id="galaxies" placeholder="e.g 'AGZ0001z9u' or '343.7, -10.5'">
+            <span class="input-group-btn">
+              <button class="btn btn-primary" type="button" id="search">Search</button>
+              <button class="btn btn-primary" type="button" id="random_gal">Random</button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="row" id="nav_row">
+        <div class="col-md-9 col-sm-12">
+          <div class="btn-group pull-right-md" data-toggle="buttons" id="zoo_buttons">
+            <label class="btn btn-primary disabled"  id="zoo_1_lab">
+              <input type="radio" name="zoo_tab" autocomplete="off"  id="zoo_1" value="1">GZ 1
+            </label>
+            <label class="btn btn-primary active" id="zoo_2_lab">
+              <input type="radio" name="zoo_tab" autocomplete="off"  id="zoo_2" value="2" checked>GZ 2
+            </label>
+            <label class="btn btn-primary" id="zoo_3_lab">
+              <input type="radio" name="zoo_tab" autocomplete="off"  id="zoo_3" value="3">GZ 3 Hubble
+            </label>
+            <label class="btn btn-primary" id="zoo_4s_lab">
+              <input type="radio" name="zoo_tab" autocomplete="off"  id="zoo_4s" value="4_s">GZ 4 Sloan
+            </label>
+            <label class="btn btn-primary" id="zoo_4c_lab">
+              <input type="radio" name="zoo_tab" autocomplete="off"  id="zoo_4c" value="4_c">GZ 4 Candels
+            </label>
+            <label class="btn btn-primary" id="zoo_4u_lab">
+              <input type="radio" name="zoo_tab" autocomplete="off"  id="zoo_4u" value="4_u">GZ 4 UKIDSS
+            </label>
+            <label class="btn btn-primary" id="zoo_4f_lab">
+              <input type="radio" name="zoo_tab" autocomplete="off"  id="zoo_4f" value="4_f">GZ 4 Ferengi
+            </label>
+          </div>
+        </div>
+        
+        <div class="col-md-3 col-sm-12">
+          <div class="btn-group pull-right" data-toggle="buttons">
+            <label class="btn btn-primary active" id="weight_raw_lab">
+              <input type="radio" name="weight_tab" autocomplete="off"  id="weight_raw" checked>Raw Votes
+            </label>
+            <label class="btn btn-primary disabled" id="weight_weighted_lab">
+              <input type="radio" name="weight_tab" autocomplete="off"  id="weight_weighted">Weighted Votes
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <div id="tree">
+            <div id="sequence"></div>
+            <div id="RA_DEC"><span id="ra_dec"></span></div>
+            <div id="body"></div>
+            <div id="odd"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row" id="controls">
+        
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-3 col-md-offset-3">
+              <label for="slider_charge" class="slider_label">Charge: <span id="slider_charge_value">...</span></label>
+            </div>
+            <div class="col-md-3">
+              <label for="slider_strength" class="slider_label">Link Strength: <span id="slider_strength_value">...</span></label>
+            </div>
+            <div class="col-md-3">
+              <label for="slider_friction" class="slider_label">Friction: <span id="slider_friction_value">...</span></label>
+            </div>      
+          </div>
+          
+          <div class="row" id="sliders">
+            <div class="col-md-3 col-md-offset-3">
+              <input type="range" min="1" max="5" value="2.5" step="0.01" id="slider_charge" />
+            </div>
+            <div class="col-md-3">
+              <input type="range" min="0" max="1" value="1" step="0.01" id="slider_strength" />
+            </div>
+            <div class="col-md-3">
+              <input type="range" min="0" max="1" value="0.2" step="0.01" id="slider_friction" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <button type="button" id="reset_button" class="btn btn-primary">Reset</button>
+        </div>
+        
+      </div>
+      
+      <footer>
+        <aside class="pull-right">Feb 11, 2015</aside>
+        <a class="pull-left" href="http://wwww.zooniverse.org" rel="author">Zooniverse</a>
+      </footer>
+      
+      <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+      </script>
+      <script src="/static/js/d3.min.js"></script>
+      <script src="/static/js/gz.js"></script>
+  </body>
 </html>

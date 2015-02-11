@@ -9,206 +9,72 @@ Array.prototype.contains = function(obj) {
 	return false;
 }
 
-// set if the site should use the local json files of the full database
-var local_files = false;
-
 // set up the margins and such
+var W = parseInt(d3.select('#tree').style('width'))
 var margin = {top: 1, right: 1, bottom: 1, left: 1},
-	width = 1080 - margin.left - margin.right,
-	height = 550 - margin.top - margin.bottom;
+    width = W - margin.left - margin.right,
+	height = .5*W - margin.top - margin.bottom;
 
-if (local_files){
-    var header = d3.select("#header")
-	    .append("select")
-	    .attr("id","galaxies")
-	    .selectAll("option");
-} else {
-    var header = d3.select("#header")
-	    .append("input")
-	    .attr("id","galaxies")
-	    .attr("type","text");
-    var header_button = d3.select("#header")
-	    .append("button")
-	    .attr("type","button")
-	    .text("Random")
-	    .attr("id","random_gal")
-	    .on("click", random_gal)
+// Re-draw when window size is changed
+var current_gal;
+window.onresize = function() {
+    val = parseInt(d3.select('#tree').style('width'))
+    if (val!=W){
+        W=val;
+        width = W - margin.left - margin.right;
+        height = .5*W - margin.top - margin.bottom;
+        updateData(current_gal);
+    }
 }
+
+// Hook up buttons
+d3.select("#random_gal").on("click",function() {
+    updateData('random');
+})
+
+d3.select("#galaxies").on("change", function() {
+	updateData(this.value);
+})
 
 // what version of galaxy zoo are we working with
 // set to 2 by default
 var zoo = 2;
-var json_list;
 var image_offset;
 set_zoo();
-d3.select("#zoo_1").on("change", function() { 
-    zoo = 1; 
-    set_zoo();
-})
-d3.select("#zoo_2").on("change", function() { 
-    zoo = 2; 
-    set_zoo();
-
-})
-d3.select("#zoo_3").on("change", function() { 
-    zoo = 3; 
-    set_zoo();
-})
-d3.select("#zoo_4s").on("change", function() { 
-    zoo = '4_s'; 
-    set_zoo();
-})
-d3.select("#zoo_4u").on("change", function() { 
-    zoo = '4_u'; 
-    set_zoo();
-})
-d3.select("#zoo_4f").on("change", function() { 
-    zoo = '4_f'; 
-    set_zoo();
-})
-d3.select("#zoo_4c").on("change", function() { 
-    zoo = '4_c'; 
-    set_zoo();
+d3.selectAll("#zoo_buttons > label").on("click", function() {
+    val=d3.select(this).select("input").property("value");
+    if (zoo!=val) {
+        zoo = val;
+        set_zoo();
+    }
 })
 
-d3.select("#light").on("change", function() {
-    d3.select("#css").attr("href","/static/css/style.css");
+// what color theme to use
+// default light
+var color_theme="light"
+d3.selectAll("#color_buttons > label").on("click", function() {
+    val=d3.select(this).select("input").property("value");
+    if (color_theme!=val) {
+        color_theme = val;
+        d3.select("#css").attr("href","/static/css/"+color_theme+"_style.css");
+    }
 })
-d3.select("#dark").on("change", function() {
-    d3.select("#css").attr("href","/static/css/style_dark.css");
-})
-
 
 function set_zoo() {
-    if (zoo == 1) {
-	    json_list = [];
-	    d3.select("#zoo_1").property("checked",1);
-    } else if (zoo == 3) {
-	    json_list = ['10000189', '10000215', '10000235', '10000249', '10000278',
-		             '10000325', '10000327', '10000331', '10000395', '10000416',
-		             '10000449', '10000457', '10000493', '10000504', '10000514',
-		             '10000519', '10002860', '10002902', '10002932', '10002937',
-		             '10003019', '10003051', '10003061', '10003080', '10003149',
-		             '10003153', '10003216', '10003361', '10003374', '10003386',
-		             '10003398', '10003402', '10003408', '10003442', '10003476',
-		             '10003488', '10003513', '10003528', '10003533', '10003534',
-		             '10003544', '10003559', '10003585', '10003685', '10003695',
-		             '10003703', '10003711', '10003719', '10003722', '10003727',
-		             '10003733', '10003750', '10003751', '10003782', '10003785',
-		             '10003801', '10003811', '10003846', '10003850', '10003853',
-		             '10003879', '10003909', '10003975', '10003977', '10004038',
-		             '10004047', '10004054', '10004065', '10004083', '10004086',
-		             '10004092', '10004094', '10004097', '10004100', '10004109',
-		             '10004113', '10004118', '10004144', '10004146', '10004153',
-		             '10004160', '10004163', '10004168', '10010723', '10010732',
-		             '10010804', '10010828', '10010842', '10010870', '10010872',
-		             '10010879', '10010933', '10010938', '10010981', '10010992',
-		             '10011013', '10011019', '10011026', '10011028', '10011054',
-		             '10011090', '10011094', '10011123', '10011132', '10011144',
-		             '10011152', '10011164', '10011183', '10011220', '10011247',
-		             '10011295', '10011298', '10011325']
-        
-	    //9614 removed from the list since it does not have an image url
-	    d3.select("#zoo_3").property("checked",1);
-	    d3.select("#weight_raw").property("checked",1);
-	    d3.select("#weight_weighted").property("disabled",1);
-	    d3.select("#weight_bias").property("disabled",1);
-    } else if (zoo == 2) {
-	    json_list = ['588017703996096547', '587738569780428805', '587735695913320507', '587742775634624545', 
-		             '587732769983889439', '588017725475782665', '588017702391578633', '588297864730181658', 
-		             '588017704545812500', '588017566564155399', '588298663573454909', '587726014001512533', 
-		             '587739098063044622', '587742615095935051', '588009371227258884', '587733410447491082', 
-		             '587724648188543033', '587739720286863441', '588017704536244309', '587738947748626521', 
-		             '588017704542404685', '587731869633871916', '587742191517433893', '588017111295197219', 
-		             '587726015088623663', '587731512078893077', '587735696987193397', '587734893290848319', 
-		             '588017110759243821', '588017569236910086', '587738067813924971', '587738569776955447', 
-		             '587736586036117538', '588017565490085907', '588017724937076758', '587722982832013381', 
-		             '588007004186476581', '588010360698961934', '587739505005297793', '587735348038467644', 
-		             '588017948813492313', '587722982831423597', '587732482744975451', '587728879794782218', 
-		             '587741828582604849', '587737827291693069', '588011218064769056', '588017948822863950', 
-		             '587739131878703149', '588010878226399343', '588017565490741294', '588017704007172105', 
-		             '588017949895819327', '587735349112799302', '587738946132770821', '587732576700399634', 
-		             '588017728153059441', '587729776369991770', '587735349112340576', '587729159500988440', 
-		             '587738410330292307', '588017703470628953', '587736584961982478', '588017725473947655', 
-		             '588017729224900665', '588017112366841905', '587739158191145031', '587735348564787262', 
-		             '587726031180660845', '588017719573086223', '588298664117076044', '587726032266526801', 
-		             '587742062688796700', '587737808501932038', '587729159502299191', '587742864209084513', 
-		             '587726014532354067', '588017704006975536', '588017726012129401', '588017702398328858', 
-		             '587739099129380912', '587736941444530242', '587732582056525908', '588017605758550042', 
-		             '588017978901528612', '587725474420097049', '587726014532550731', '588017565483859979', 
-		             '588017703482032232', '587735344799350868', '587741722823819271', '588017569236910085', 
-		             '587731870707089488', '588848899380084803', '587735696440623158'];
-	    d3.select("#zoo_2").property("checked",1);
-	    d3.select("#weight_raw").property("checked",1);
-	    d3.select("#weight_weighted").property("disabled",1);
-	    d3.select("#weight_bias").property("disabled",1);
-    } else if (zoo == '4_s') {
-	    json_list = [];
-	    d3.select("#zoo_4s").property("checked",1);
-        d3.select("#weight_raw").property("checked",1);
-	    d3.select("#weight_weighted").property("disabled",1);
-	    d3.select("#weight_bias").property("disabled",1);
-    } else if (zoo == '4_u') {
-	    json_list = [];
-	    d3.select("#zoo_4u").property("checked",1);
-        d3.select("#weight_raw").property("checked",1);
-	    d3.select("#weight_weighted").property("disabled",1);
-	    d3.select("#weight_bias").property("disabled",1);
-    } else if (zoo == '4_f') {
-	    json_list = [];
-	    d3.select("#zoo_4f").property("checked",1);
-        d3.select("#weight_raw").property("checked",1);
-	    d3.select("#weight_weighted").property("disabled",1);
-	    d3.select("#weight_bias").property("disabled",1);
-    } else if (zoo == '4_c') {
-	    json_list = [];
-	    d3.select("#zoo_4c").property("checked",1);
-        d3.select("#weight_raw").property("checked",1);
-	    d3.select("#weight_weighted").property("disabled",1);
-	    d3.select("#weight_bias").property("disabled",1);
+    switch (zoo) {
+    case "1":
+        break;
+    default:
+        d3.select("#weight_raw").attr("class","btn btn-primary active");
+	    d3.select("#weight_weighted_lab").attr("class","btn btn-primary disabled");
     }
-
-    if (local_files){
-	    header = header.data(json_list, function(d) { return d; });
-
-	    header.enter()
-	        .append("option")
-	        .attr("value", function(d) { return d; })
-	        .text(function(d) { return d; });
-	    
-	    header.exit().remove();
-    }
-
     // read in file that maps the answer_id to the 
     // image offset in workflow.png and providing a useful
     // mouse over message
     d3.json("/static/config/zoo"+zoo+"_offset.json", function(d){
 	    image_offset = d;
-	    run_default();
+	    updateData('random');
     });
-};
-
-d3.select("#galaxies")
-	.on("change", function() {
-	    updateData(this.value);
-	});
-//load the first item of the list by default
-function run_default() {
-    if (local_files) {
-	    updateData(json_list[0]);
-    } else {
-	    random_gal();
-    }
-};
-
-// random galaxy
-function random_gal() {
-    updateData('random')
-    /*$.getJSON($SCRIPT_ROOT + '/_get_random', {
-        table: "gz"+zoo,
-    }, function(d) {
-	    updateData(d.result.gal_name)
-    });*/
 };
 
 // function that takes in a galaxy id and makes the node tree
@@ -261,18 +127,12 @@ function updateData(gal_id){
     update_charge(2.5);
     update_strength(1);
     update_friction(0.35);
-
-    if (local_files) {
-	    file_name="/static/data/"+gal_id+".json";
-	    d3.json(file_name, json_callback);
-    } else {
-	    $.getJSON($SCRIPT_ROOT + '/_get_path', {
-            table: "gz"+zoo,
-	        argv: gal_id
-	    }, function(d) {
-	        json_callback(d.result)
-	    });
-    }
+	$.getJSON($SCRIPT_ROOT + '/_get_path', {
+        table: "gz"+zoo,
+	    argv: gal_id
+	}, function(d) {
+	    json_callback(d.result)
+	});
 
     // now that the basics are set up read in the json file
     var Total_value
@@ -283,9 +143,10 @@ function updateData(gal_id){
 	    d3.select("#ra_dec")
 	        .text("RA: " + parseFloat(answers.ra).toFixed(3) + ", DEC:" + parseFloat(answers.dec).toFixed(3))
 
+        current_gal = answers.gal_name;
         // make sure reset button returns same object
         function reset_data(){
-	        updateData(answers.gal_name);
+	        updateData(current_gal);
         }
         d3.select("#reset_button").on("click", reset_data)
         

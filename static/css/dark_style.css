@@ -1,0 +1,83 @@
+body {
+    color: #fff;
+    background-color: #202020;
+}
+
+#galaxies {
+    border-color: #333;
+}
+
+#galaxies:focus {
+    border-color: #333;
+    box-shadow: 0 0 3px 3px rgba(0,127,255,.5);
+}
+
+.btn-primary {
+    background-color: #555;
+    border-color: #333;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #999;
+    border-color: #333;
+    color: #fff;
+}
+
+.btn-primary.active {
+    background-color: #fff;
+    border-color: #333;
+    color: #000;
+}
+
+.btn-primary.disabled {
+    background-color: #333;
+    border-color: #333;
+    color: #888;
+}
+
+.link {
+    stroke: #fff;
+}
+
+.link_max {
+    stroke: #007fff;
+}
+
+.breadcrumb {
+    fill: #007fff;
+}
+
+.breadcrumb_text {
+    fill: #fff;
+}
+
+svg {
+    color: #fff;
+}
+
+#RA_DEC {
+    color: #fff;
+}
+
+input[type='range']::-moz-range-track {
+    box-shadow: inset 0 0 5px #333;
+    background-color: #999;
+}
+
+input[type='range'] {
+    box-shadow: inset 0 0 5px #333;
+    background-color: #999;
+}
+
+input[type='range']::-webkit-slider-thumb {
+    background-color: #fff;
+    box-shadow:inset 0 0 10px rgba(000,000,000,0.5);
+    border: 1px solid #999;
+}
+
+input[type='range']::-moz-range-thumb {
+    background-color: #fff;
+    box-shadow:inset 0 0 10px rgba(000,000,000,0.5);
+    border: 1px solid #999;
+}
