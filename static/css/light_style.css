@@ -38,7 +38,8 @@ body {
     color: #fff;
 }
 
-.btn-primary.disabled {
+.btn-primary.disabled,
+.btn-primary.disabled.active {
     background-color: #ccc;
     border-color: #888;
     color: #888;
