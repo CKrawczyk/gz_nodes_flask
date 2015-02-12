@@ -4,8 +4,14 @@ from gz_classes import *
 from gz_mongo import *
 
 application = Flask(__name__, instance_relative_config=True)
-#application.config.from_pyfile('gz_nodes_local.cfg', silent=True)
-application.config.from_envvar('APPLICATION_SETTINGS', silent=True)
+
+#check if the app is running local (not docker)
+if __name__=="__main__":
+    application.config.from_pyfile('gz_nodes_local.cfg', silent=True)
+    mc=Mongo_connect(local=True)
+else:
+    application.config.from_envvar('APPLICATION_SETTINGS', silent=True)
+    mc=Mongo_connect(local=False)
 
 db=SQLAlchemy(application)
 db.Model.metadata.reflect(db.get_engine(application,'gz2'))
@@ -14,10 +20,10 @@ db.Model.metadata.reflect(db.get_engine(application,'gz3'),extend_existing=True)
 BC3=get_tables(db,'gz3')
 db_dict={'gz2':GZ2(db,application,BC2),
                'gz3':GZ3(db,application,BC3),
-               'gz4_s':GZ4_sloan(),
-               'gz4_u':GZ4_ukidss(),
-               'gz4_f':GZ4_ferengi(),
-               'gz4_c':GZ4_candels()}
+               'gz4_s':GZ4_sloan(mc),
+               'gz4_u':GZ4_ukidss(mc),
+               'gz4_f':GZ4_ferengi(mc),
+               'gz4_c':GZ4_candels(mc)}
 
 @application.route('/')
 def index():
@@ -31,5 +37,5 @@ def get_path():
 
 if __name__=="__main__":
     #application.debug = True
-    #application.run()
-    application.run(host='0.0.0.0',port=80)
+    application.run()
+    #application.run(host='0.0.0.0',port=80)
