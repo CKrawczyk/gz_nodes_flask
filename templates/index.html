@@ -89,35 +89,42 @@
       
       <div class="row" id="controls">
         
-        <div class="col-md-8">
+        <div class="col-lg-2 col-lg-offset-2 col-sm-3">
           <div class="row">
-            <div class="col-md-3 col-md-offset-3">
+            <div class="col-md-12">
               <label for="slider_charge" class="slider_label">Charge: <span id="slider_charge_value">...</span></label>
             </div>
-            <div class="col-md-3">
-              <label for="slider_strength" class="slider_label">Link Strength: <span id="slider_strength_value">...</span></label>
-            </div>
-            <div class="col-md-3">
-              <label for="slider_friction" class="slider_label">Friction: <span id="slider_friction_value">...</span></label>
-            </div>      
-          </div>
-          
-          <div class="row" id="sliders">
-            <div class="col-md-3 col-md-offset-3">
+            <div class="col-md-12">
               <input type="range" min="1" max="5" value="2.5" step="0.01" id="slider_charge" />
             </div>
-            <div class="col-md-3">
+          </div>
+        </div>
+        
+        <div class="col-lg-2 col-sm-3">
+          <div class="row">
+            <div class="col-md-12">
+              <label for="slider_strength" class="slider_label">Link Strength: <span id="slider_strength_value">...</span></label>
+            </div>
+            <div class="col-md-12">
               <input type="range" min="0" max="1" value="1" step="0.01" id="slider_strength" />
             </div>
-            <div class="col-md-3">
+          </div>
+        </div>
+        
+        <div class="col-lg-2 col-sm-3">
+          <div class="row">
+            <div class="col-md-12">
+              <label for="slider_friction" class="slider_label">Friction: <span id="slider_friction_value">...</span></label>
+            </div>
+            <div class="col-md-12">
               <input type="range" min="0" max="1" value="0.2" step="0.01" id="slider_friction" />
             </div>
           </div>
         </div>
-        <div class="col-md-2" id="reset">
-          <button type="button" id="reset_button" class="btn btn-primary">Reset</button>
-        </div>
         
+        <div class="col-lg-2 col-sm-3" id="reset">
+          <button type="button" id="reset_button" class="btn btn-primary">Reset</button>
+        </div>        
       </div>
       
       <footer>

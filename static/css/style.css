@@ -55,7 +55,7 @@ h1 {
 
 #reset_button {
     border: 0px;
-    min-width: 120px;
+    width: 100%;
 }
 
 .link {
