@@ -172,8 +172,4 @@ input[type='range']::-moz-focus-outer {
     .slider_label {
         font-size: 12px;
     }
-    .col-sm-center {
-        margin: 0 auto;
-        float: none;
-    }
 }

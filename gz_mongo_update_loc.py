@@ -3,7 +3,7 @@
 #like [log,lat] system (-180,180) not (0,360)
 #this field can be used to index the database the right way
 
-from pymongo import MongoClient, GEOSPHERE
+from pymongo import MongoClient
 import progressbar as pb
 
 client=MongoClient('localhost',27017)

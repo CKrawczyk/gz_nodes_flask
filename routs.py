@@ -1,6 +1,4 @@
 from flask import Flask, jsonify, render_template, request
-from flask.ext.sqlalchemy import SQLAlchemy
-from gz_classes import *
 from gz_mongo import *
 
 application = Flask(__name__, instance_relative_config=True)
@@ -13,13 +11,8 @@ else:
     application.config.from_envvar('APPLICATION_SETTINGS', silent=True)
     mc=Mongo_connect(local=False)
 
-db=SQLAlchemy(application)
-db.Model.metadata.reflect(db.get_engine(application,'gz2'))
-BC2=get_tables(db,'gz2')
-db.Model.metadata.reflect(db.get_engine(application,'gz3'),extend_existing=True)
-BC3=get_tables(db,'gz3')
-db_dict={'gz2':GZ2(db,application,BC2),
-               'gz3':GZ3(db,application,BC3),
+db_dict={'gz2':GZ2(mc),
+               'gz3':GZ3(mc),
                'gz4_s':GZ4_sloan(mc),
                'gz4_u':GZ4_ukidss(mc),
                'gz4_f':GZ4_ferengi(mc),
@@ -36,6 +29,6 @@ def get_path():
     return jsonify(result=db_dict[table].run(argv))
 
 if __name__=="__main__":
-    #application.debug = True
+    application.debug = True
     application.run()
     #application.run(host='0.0.0.0',port=80)
