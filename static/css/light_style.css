@@ -3,11 +3,14 @@ body {
     background-color: #efefef;
 }
 
-#galaxies {
+#galaxies,
+#upload_galaxy {
     border-color: #888;
 }
 
-#galaxies:focus {
+#galaxies:focus,
+#upload_galaxy:focus {
+    outline: 0;
     border-color: #888;
     box-shadow: 0 0 3px 3px rgba(255,128,0,.5);    
 }

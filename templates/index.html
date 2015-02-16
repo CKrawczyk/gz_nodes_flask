@@ -27,7 +27,7 @@
         <div class="col-md-7 col-sm-12">
           <h1>Node Tree: Galaxy Zoo</h1>
         </div>
-        <div class="col-md-5 col-sm-12">
+        <div class="col-md-5 col-sm-12" id="search_button_cell">
           <div class="input-group" id="search_buttons">
             <input type="text" class="form-control" id="galaxies">
             <span class="input-group-btn">
@@ -36,11 +36,25 @@
             </span>
           </div>
         </div>
+        <div class="col-md-5 col-sm-12" id="upload_dd_cell" style="display: none;">
+          <div class="input-group" id="dd_buttons">
+            <select class="form-control pull-right" id="upload_galaxy">
+            </select>
+            <input type="file" id="file_upload" style="display:none;">
+            <div class="input-group-btn">
+              <button class="btn btn-primary" type="button" id="dd_previous">Previous</button>
+              <button class="btn btn-primary" type="button" id="dd_next">Next</button>
+            </div>
+          </div>
+        </div>
       </div>
       
       <div class="row" id="nav_row">
         <div class="col-md-9 col-sm-12">
           <div class="btn-group btn-group-sm pull-right-md" data-toggle="buttons" id="zoo_buttons">
+            <label class="btn btn-primary"  id="upload_lab">
+              <input type="radio" name="zoo_tab" autocomplete="off"  id="upload" value="0">Upload
+            </label>
             <label class="btn btn-primary disabled"  id="zoo_1_lab">
               <input type="radio" name="zoo_tab" autocomplete="off"  id="zoo_1" value="1" disabled>GZ 1
             </label>

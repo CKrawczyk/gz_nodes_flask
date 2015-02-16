@@ -7,7 +7,7 @@ Array.prototype.contains = function(obj) {
 		}
 	}
 	return false;
-}
+};
 
 // set up the margins and such
 var W = parseInt(d3.select('#tree').style('width'))
@@ -25,32 +25,55 @@ function resize_window() {
         height = .5*W - margin.top - margin.bottom;
         updateData(current_gal);
     }
-}
+};
 
 // wait for re-size event to be over before re-drawing
 var doit;
 window.onresize = function() {
     clearTimeout(doit);
     doit = setTimeout(resize_window, 100);
-}
+};
 
 // Hook up buttons
 d3.select("#random_gal").on("click",function() {
     updateData('random');
-})
+});
 
 d3.select("#galaxies").on("change", function() {
 	updateData(this.value);
-})
+});
+
+d3.select("#file_upload").on("change", function() {
+    var file = d3.event.target.files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.onloadend = function(evt) {
+            var dataText = evt.target.result;
+            upload_me(dataText);
+        };
+        reader.readAsText(file);
+    };
+});
 
 // what version of galaxy zoo are we working with
 // set to 2 by default
-var zoo = 2;
+var zoo = "2";
+var upload = false;
 var image_offset;
 set_zoo();
 d3.selectAll("#zoo_buttons > label").on("click", function() {
     val=d3.select(this).select("input").property("value");
-    if (zoo!=val) {
+    if (val=="0") {
+        d3.select("#search_button_cell").attr("style","display: none;");
+        d3.select("#upload_dd_cell").attr("style","display: block;");
+        upload = true;
+        document.getElementById("file_upload").click();
+        //upload_me("/static/data/test.csv");
+    }
+    else if (upload || zoo!=val) {
+        d3.select("#upload_dd_cell").attr("style","display: none;");
+        d3.select("#search_button_cell").attr("style","display: block;");
+        upload = false;
         zoo = val;
         set_zoo();
     }
@@ -67,7 +90,64 @@ d3.selectAll("#color_buttons > label").on("click", function() {
     }
 })
 
-function set_zoo() {
+// funciton to handle an uploaded file
+function upload_me(dataText) {
+    // parse data stream
+    var data = [];
+    d3.csv.parse(dataText, function(row) {
+        data.push(row);
+    });
+    var max_size = data.length
+    // populate the dropdown list
+    ug=d3.select("#upload_galaxy").selectAll("option").data(data, function(d, i) { return  i+1+": "+d.value+" "+d.table; });
+    ug.enter()
+        .append("option")
+        .attr("value", function(d, i) { return i; })
+        .attr("search", function(d) { return d.value; })
+        .attr("table", function(d) { return d.table; })
+        .text(function(d, i) {
+            idx=i+1;
+            return "   "+idx+": "+d.value+" "+d.table;
+        });
+    ug.exit().remove();
+    // hook up 'previous' button
+    d3.select("#dd_previous").on("click", function() {
+        current=parseInt(d3.select("#upload_galaxy").property("value"));
+        if (current>0) {
+            new_val=current-1
+            d3.select("#upload_galaxy").property("value", current-1)
+            dd_change(d3.select("#upload_galaxy").select('option[value="'+new_val+'"]'));
+        };
+    });
+    // hook up 'next' button
+    d3.select("#dd_next").on("click", function() {
+        current=parseInt(d3.select("#upload_galaxy").property("value"));
+        if (current<max_size-1) {
+            new_val=current+1
+            d3.select("#upload_galaxy").property("value", current+1)
+            dd_change(d3.select("#upload_galaxy").select('option[value="'+new_val+'"]'));
+        };
+    });
+    // this controls changed due to clicking on the lsit
+    d3.select("#upload_galaxy").on("change", function() {
+        dd_change(d3.select(this).select('option[value="'+this.value+'"]'));
+    });
+    // function to update node tree vased on selected option
+    function dd_change(selected_option) {
+        val = selected_option.attr("table").substr(2)
+        if (zoo != val) {
+            zoo = val;
+            set_zoo(selected_option.attr("search"));
+        }
+        else {
+            updateData(selected_option.attr("search"));
+        };
+    };
+    // load first option from the list
+    dd_change(d3.select("#upload_galaxy").select('option[value="0"]'));
+};
+
+function set_zoo(search) {
     switch (zoo) {
     case "1":
         break;
@@ -80,7 +160,7 @@ function set_zoo() {
     // mouse over message
     d3.json("/static/config/zoo"+zoo+"_offset.json", function(d){
 	    image_offset = d;
-	    updateData('random');
+	    updateData(search||'random');
     });
 };
 
