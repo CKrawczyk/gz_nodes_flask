@@ -4,41 +4,28 @@ gz_nodes_flask
 ============
 
 Galaxy Zoo visualization using a node tree
-
 The node tree is made using d3 and js.
 
-This app is built using flask and flask-sqlalchemy to connect to a
-MySQL database. The `instance/gz_nodes.cfg` file should contain the
-information needed to connect to the database (with databases named `gz2` and `gz3`):
+This app is built using Flask and Flask-PyMongo to connect to a
+Mongo database. The `instance/gz_nodes.cfg` file should contain the
+information needed to connect to the database:
 
 ```
-SQLALCHEMY_DATABASE_URI =mysql+mysqlconnector://username:password@host:port/gz2
-SQLALCHEMY_BINDS ={'gz2':mysql+mysqlconnector://username:password@host:port/gz2,
-    'gz3':mysql+mysqlconnector://username:password@host:port/gz3}
+MONGO_HOST = 'localhost'
+MONGO_DBNAME = 'galaxy_zoo'
 ```
 
-*NOTE*: If using docker set host to the result of `ip route
+*NOTE 1*: If using docker set `MONGO_HOST` to the result of `ip route
  show 0.0.0.0/0 | grep -Eo 'via \S+' | awk '{ print $2 }'`. If using
- boot2docker set host to `192.168.59.3`. In either case make sure
- mysql is set up to accept connections from `username` on this host
- address (see
- http://stackoverflow.com/questions/1559955/host-xxx-xx-xxx-xxx-is-not-allowed-to-connect-to-this-mysql-server
- for more info on how to do this).
+ boot2docker set host to `192.168.59.3` (output of `boot2docker ip`). 
 
-This app also connects ot a local MongDB database containing the data
-for Galaxy Zoo 4 (with databases named `galaxy_zoo.galaxy_zoo_subjects` and `galaxy_zoo.galaxy_zoo_classifications`).
-The script `gz_mongo_update_loc.py` should be run to add a `location_geo` field to each subject. This field
-converts [RA,DEC] to an "earth like" [log,lat] system so `2dsphere` indexing can be used.
-These databases should have the following indexes added for faster queries:
-```
->>> mongo
->>> use galaxy_zoo
->>> db.galaxy_zoo_subjects.ensureIndex({‘location_geo’: ‘2dsphere’, ‘metadata.survey’: 1})
->>> db.galaxy_zoo_subjects.ensureIndex({‘metadata.survey’: 1, ‘random’: 1})
->>> db.galaxy_zoo_classifications.ensureIndex({‘subject_ids’:1})
-```
-This host ip address from above should also be used in line 9 of `gz_mongo.py`
-so the app can connect to Mongo.
+*NOTE 2*: If running via `python routs.py` (i.e. not using docker) place the above in
+`instance/gz_nodes_local.cfg`. This allows independent setups
+for running local and running through docker.
+
+The Mongo database used is a cobination of Galaxy Zoo 2, 3, and 4. The GZ2
+and GZ3 data has been converted from the SQL source database, and all subjects
+have been modified and indexed for faster queries.
 
 Docker is set up to run the flask app on an internal Apache/mod_wsgi server.
 See http://blog.dscpl.com.au/2014/12/hosting-python-wsgi-applications-using.html for more info.
@@ -59,6 +46,12 @@ Navigate to `http://localhost:5000/` (docker) or
 ```
 Navigate to `http://localhost:5000/` (docker) or
 `http://192.168.59.103:5000/` (boot2docker) in a web browser.
+
+##Run local
+```
+python routs.py
+```
+Navigate to `http://localhost:5000` in a web browser.
 
 ##Node tree properties
 The nodes can be moved by dragging them around and be collapsed by

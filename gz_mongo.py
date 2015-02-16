@@ -1,5 +1,3 @@
-from pymongo import MongoClient
-from pprint import pprint
 import re
 from random import random
 import gz2
@@ -30,27 +28,19 @@ def ssplit2(seq,splitters):
     return [seq]
 
 #=====================================================
-class Mongo_connect:
-    def __init__(self,local=False):
-        if local:
-            client=MongoClient('localhost',27017)
-        else:
-            client=MongoClient('192.168.59.3', 27017)
-        db=client['galaxy_zoo']
-        self.subjects=db['galaxy_zoo_subjects']
-        self.classifications=db['galaxy_zoo_classifications']
 
 class GZ_base:
     def __init__(self):
         self.survey_name=''
         self.survey=None
+        self.connect=None
         self.debug=False
         self.anything_odd=''
         self.get_links=self.get_links_mongo
     def get_links_mongo(self,m_id):
         #m_id is the mongo "_id" value for the galaxy subject
         #find all classifications with the propper subject id
-        c=self.connect.classifications.find({'subject_ids':m_id})
+        c=self.connect.db.galaxy_zoo_classifications.find({'subject_ids':m_id})
         vote_dict={}
         odd_dict={}
         for i in c:
@@ -82,7 +72,8 @@ class GZ_base:
         self.odd_list=[{'name':k[0], 'value':k[1]} for k in odd_list]
         self.links=[{'source':k[0], 'target':k[1], 'value': v} for k,v in vote_dict.iteritems()]
     def get_links_sql(self,m_id):
-        c=self.connect.classifications.find({'subject_ids':m_id})
+        # The annotations field is different for the SQL converted subjects
+        c=self.connect.db.galaxy_zoo_classifications.find({'subject_ids':m_id})
         path_dict={}
         odd_dict={}
         for j in c:
@@ -113,15 +104,15 @@ class GZ_base:
         self.links=[{'source':k[0], 'target':k[1], 'value': v} for k,v in path_dict.iteritems()]
     def run(self,argv='180 0'):
         if argv=='random':
-            s=self.connect.subjects.find_one({'metadata.survey':self.survey_name, 'random':{'$gt':random()}})
+            s=self.connect.db.galaxy_zoo_subjects.find_one({'metadata.survey':self.survey_name, 'random':{'$gt':random()}})
         else:
             argv=re.findall(r"[\w.-]+",argv)
             L=len(argv)
             if L==1:
-                s=self.connect.subjects.find_one({'zooniverse_id':argv[0]})
+                s=self.connect.db.galaxy_zoo_subjects.find_one({'zooniverse_id':argv[0]})
             else:
                 ra,dec=map(float,argv)
-                s=self.connect.subjects.find_one({'location_geo':{'$near':{'$geometry':{ 'type' : 'Point' , 'coordinates' :[ra-180,dec]}}}, 'metadata.survey':self.survey_name})
+                s=self.connect.db.galaxy_zoo_subjects.find_one({'location_geo':{'$near':{'$geometry':{ 'type' : 'Point' , 'coordinates' :[ra-180,dec]}}}, 'metadata.survey':self.survey_name})
         if self.debug:
             pprint(s)
         self.get_links(s['_id'])

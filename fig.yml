@@ -1,6 +1,6 @@
 web:
   build: .
   environment:
-  - "APPLICATION_SETTINGS=/app/instance/gz_nodes.cfg"
+  - "GZ_NODES_SETTINGS=/app/instance/gz_nodes.cfg"
   ports:
   - "5000:80"

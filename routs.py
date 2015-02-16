@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, render_template, request
+from flask.ext.pymongo import PyMongo
 from gz_mongo import *
 
 application = Flask(__name__, instance_relative_config=True)
@@ -6,10 +7,9 @@ application = Flask(__name__, instance_relative_config=True)
 #check if the app is running local (not docker)
 if __name__=="__main__":
     application.config.from_pyfile('gz_nodes_local.cfg', silent=True)
-    mc=Mongo_connect(local=True)
 else:
-    application.config.from_envvar('APPLICATION_SETTINGS', silent=True)
-    mc=Mongo_connect(local=False)
+    application.config.from_envvar('GZ_NODES_SETTINGS', silent=True)
+mc = PyMongo(application)
 
 db_dict={'gz2':GZ2(mc),
                'gz3':GZ3(mc),
@@ -31,4 +31,3 @@ def get_path():
 if __name__=="__main__":
     application.debug = True
     application.run()
-    #application.run(host='0.0.0.0',port=80)
