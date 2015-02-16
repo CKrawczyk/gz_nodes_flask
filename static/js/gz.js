@@ -90,6 +90,8 @@ d3.selectAll("#color_buttons > label").on("click", function() {
     }
 })
 
+$('.selectpicker').selectpicker();
+
 // funciton to handle an uploaded file
 function upload_me(dataText) {
     // parse data stream
@@ -110,6 +112,7 @@ function upload_me(dataText) {
             return "   "+idx+": "+d.value+" "+d.table;
         });
     ug.exit().remove();
+    $('.selectpicker').selectpicker('refresh');
     // hook up 'previous' button
     d3.select("#dd_previous").on("click", function() {
         current=parseInt(d3.select("#upload_galaxy").property("value"));
@@ -132,8 +135,13 @@ function upload_me(dataText) {
     d3.select("#upload_galaxy").on("change", function() {
         dd_change(d3.select(this).select('option[value="'+this.value+'"]'));
     });
+    d3.select("ul.dropdown-menu.selectpicker").selectAll('li').on("click", function() {
+        current=parseInt(d3.select(this).attr("data-original-index"));
+        dd_change(d3.select("#upload_galaxy").select('option[value="'+current+'"]'));
+    });
     // function to update node tree vased on selected option
     function dd_change(selected_option) {
+        $('.selectpicker').selectpicker('render');
         val = selected_option.attr("table").substr(2)
         if (zoo != val) {
             zoo = val;

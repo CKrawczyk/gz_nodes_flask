@@ -4,12 +4,12 @@ body {
 }
 
 #galaxies,
-#upload_galaxy {
+.selectpicker {
     border-color: #888;
 }
 
 #galaxies:focus,
-#upload_galaxy:focus {
+.selectpicker:focus {
     outline: 0;
     border-color: #888;
     box-shadow: 0 0 3px 3px rgba(255,128,0,.5);    

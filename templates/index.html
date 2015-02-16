@@ -2,11 +2,13 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/bootstrap-select.min.css">
     <link type="text/css" rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="/static/css/style.css">
     <link id="css" type="text/css" rel="stylesheet" href="/static/css/light_style.css"/>
     <script src="/static/js/jquery-1.11.1.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/bootstrap-select.min.js"></script>
   </head>
   <body>
     <header>
@@ -36,9 +38,9 @@
             </span>
           </div>
         </div>
-        <div class="col-md-5 col-sm-12" id="upload_dd_cell" style="display: none;">
+        <div class="col-md-5 col-sm-12 pull-right" id="upload_dd_cell" style="display: none;">
           <div class="input-group" id="dd_buttons">
-            <select class="form-control pull-right" id="upload_galaxy">
+            <select class="selectpicker" id="upload_galaxy" data-width="100%">
             </select>
             <input type="file" id="file_upload" style="display:none;">
             <div class="input-group-btn">
