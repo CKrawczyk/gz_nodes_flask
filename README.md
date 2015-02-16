@@ -17,7 +17,7 @@ MONGO_DBNAME = 'galaxy_zoo'
 
 *NOTE 1*: If using docker set `MONGO_HOST` to the result of `ip route
  show 0.0.0.0/0 | grep -Eo 'via \S+' | awk '{ print $2 }'`. If using
- boot2docker set host to `192.168.59.3` (output of `boot2docker ip`). 
+ boot2docker set host to `192.168.59.3`. 
 
 *NOTE 2*: If running via `python routs.py` (i.e. not using docker) place the above in
 `instance/gz_nodes_local.cfg`. This allows independent setups
