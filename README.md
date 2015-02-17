@@ -67,7 +67,8 @@ There are 3 sliders at the bottom that can be used to adjust the tree:
 The `Reset` button will set all the sliders back to their default position.
 
 The `Upload` button allows the user to upload a `.csv` file containing
-a list of galaxies to look at. The file should be formeted as:
+a list of galaxies to explore. The file should be formeted as:
+
 ```
 value,table
 0 0,gz2
@@ -75,9 +76,11 @@ value,table
 AGZ0007to6,gz4_f
 AGZ0002m46,gz4_s
 ```
+
 The value column can be an RA DEC pair seperated by a space, or the
-`Zooniverse_id` (NOTE: for GZ2 the `Zooniverse_id` is the SDSS id). 
+`Zooniverse_id` (*NOTE*: for GZ2 the `Zooniverse_id` is the SDSS id). 
 The table column can be
+
 ```
 gz2
 gz3
@@ -87,3 +90,6 @@ gz4_u
 gz4_f
 ```
 to indicate what Galaxy Zoo table to search.
+
+*NOTE*: Make sure there are no spaces around the `,` or the script
+will not read in the file correctly.
