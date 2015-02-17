@@ -90,8 +90,6 @@ d3.selectAll("#color_buttons > label").on("click", function() {
     }
 })
 
-$('.selectpicker').selectpicker();
-
 // funciton to handle an uploaded file
 function upload_me(dataText) {
     // parse data stream
@@ -112,6 +110,7 @@ function upload_me(dataText) {
             return "   "+idx+": "+d.value+" "+d.table;
         });
     ug.exit().remove();
+    $('.selectpicker').selectpicker();
     $('.selectpicker').selectpicker('refresh');
     // hook up 'previous' button
     d3.select("#dd_previous").on("click", function() {
