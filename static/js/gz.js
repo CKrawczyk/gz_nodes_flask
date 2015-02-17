@@ -113,29 +113,29 @@ function upload_me(dataText) {
     $('.selectpicker').selectpicker('refresh');
     // hook up 'previous' button
     d3.select("#dd_previous").on("click", function() {
-        current=parseInt(d3.select("#upload_galaxy").property("value"));
+        current=parseInt(d3.select("ul.dropdown-menu.selectpicker").select("li.selected").attr("data-original-index"))
         if (current>0) {
-            new_val=current-1
-            d3.select("#upload_galaxy").property("value", current-1)
-            dd_change(d3.select("#upload_galaxy").select('option[value="'+new_val+'"]'));
+            dd_now=current-1;
+            d3.select("#upload_galaxy").property("value", dd_now)
+            dd_change(d3.select("#upload_galaxy").select('option[value="'+dd_now+'"]'));
         };
     });
     // hook up 'next' button
     d3.select("#dd_next").on("click", function() {
-        current=parseInt(d3.select("#upload_galaxy").property("value"));
+        current=parseInt(d3.select("ul.dropdown-menu.selectpicker").select("li.selected").attr("data-original-index"))
         if (current<max_size-1) {
-            new_val=current+1
-            d3.select("#upload_galaxy").property("value", current+1)
-            dd_change(d3.select("#upload_galaxy").select('option[value="'+new_val+'"]'));
+            dd_now=current+1;
+            d3.select("#upload_galaxy").property("value", dd_now)
+            dd_change(d3.select("#upload_galaxy").select('option[value="'+dd_now+'"]'));
         };
     });
     // this controls changed due to clicking on the lsit
-    d3.select("#upload_galaxy").on("change", function() {
-        dd_change(d3.select(this).select('option[value="'+this.value+'"]'));
-    });
     d3.select("ul.dropdown-menu.selectpicker").selectAll('li').on("click", function() {
         current=parseInt(d3.select(this).attr("data-original-index"));
-        dd_change(d3.select("#upload_galaxy").select('option[value="'+current+'"]'));
+        if (current != dd_now) {
+            dd_now=current;
+            dd_change(d3.select("#upload_galaxy").select('option[value="'+current+'"]'));
+        }
     });
     // function to update node tree vased on selected option
     function dd_change(selected_option) {
@@ -150,6 +150,7 @@ function upload_me(dataText) {
         };
     };
     // load first option from the list
+    var dd_now = 0
     dd_change(d3.select("#upload_galaxy").select('option[value="0"]'));
 };
 
