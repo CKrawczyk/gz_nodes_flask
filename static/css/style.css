@@ -59,6 +59,23 @@ h1 {
     width: 100%;
 }
 
+.form-control:focus {
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.bootstrap-select .btn:focus {
+    outline: none !important;
+    background-color: #fff;
+}
+
+.dropdown-menu li a:focus,
+.dropdown-menu li a:hover {
+    outline: none !important;
+    background-color: #bbb;
+}
+
 #reset_button {
     border: 0px;
     width: 100%;
