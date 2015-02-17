@@ -71,10 +71,21 @@ a list of galaxies to explore. The file should be formeted as:
 
 ```
 value,table
-0 0,gz2
-588848899912630457,gz2
-AGZ0007to6,gz4_f
+180 90,gz2
+587733609628696658,gz2
+588011502072234044,gz2
+15.768 0.474,gz2
+136.145 14.593,gz2
+AHZ20003km,gz3
+AHZ6000bvu,gz3
 AGZ0002m46,gz4_s
+AGZ0003diy,gz4_s
+AGZ00014r1,gz4_s
+AGZ0004v0i,gz4_s
+AGZ00000s3,gz4_c
+AGZ0006ry1,gz4_u
+AGZ0007te4,gz4_f
+AGZ0007to6,gz4_f
 ```
 
 The value column can be an RA DEC pair seperated by a space, or the

@@ -110,7 +110,6 @@ function upload_me(dataText) {
             return "   "+idx+": "+d.value+" "+d.table;
         });
     ug.exit().remove();
-    $('.selectpicker').selectpicker();
     $('.selectpicker').selectpicker('refresh');
     // hook up 'previous' button
     d3.select("#dd_previous").on("click", function() {
