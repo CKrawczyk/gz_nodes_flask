@@ -137,7 +137,7 @@ function upload_me(dataText) {
             dd_change(d3.select("#upload_galaxy").select('option[value="'+current+'"]'));
         }
     });
-    // function to update node tree vased on selected option
+    // function to update node tree based on selected option
     function dd_change(selected_option) {
         $('.selectpicker').selectpicker('render');
         val = selected_option.attr("table").substr(2)
