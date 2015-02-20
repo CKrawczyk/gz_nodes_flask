@@ -230,6 +230,8 @@ function updateData(gal_id){
 
     // now that the basics are set up read in the json file
     var Total_value
+    var current_gal
+    var metadata
     function json_callback(answers) { 
 	    // draw the galaxy image
 	    $(".galaxy-image").attr("src", answers.image_url);
@@ -237,6 +239,7 @@ function updateData(gal_id){
 	    d3.select("#ra_dec")
 	        .text("RA: " + parseFloat(answers.ra).toFixed(3) + ", DEC:" + parseFloat(answers.dec).toFixed(3))
 
+        metadata = answers.metadata;
         current_gal = answers.gal_name;
         // make sure reset button returns same object
         function reset_data(){
@@ -512,10 +515,23 @@ function updateData(gal_id){
         
 	    // add a group to the node to translate it
 	    var genter = gnode.enter().append("g")
-	        .attr("class","gnode")
+	        .attr("class", function(d) { return d.answer_id ? "gnode" : "gnode metadata-thumbnail"; })
 	        .call(force.drag)
-	        .on("click", click);
+	        .on("click", function(d) { return d.answer_id ? click(d) : metadata_thumbnail(d); });
 
+        // format the shadow-box for metadata
+        function metadata_thumbnail(d) {
+	        $('.modal-body').empty();
+            var title = current_gal;
+            var metastring = JSON.stringify(metadata,null,2);
+            // remove quotes
+            metastring = metastring.replace(/\"([^(\")"]+)\"/g,"$1");
+            metastring = metastring.replace(/[,]+/g, "")
+            $('.modal-title').html(title);
+            $('.modal-body').html('<pre class="modal-data">'+metastring+'</pre>');
+	        $('#myModal').modal({show:true});
+        };       
+        
 	    // add a group to the node to scale it
 	    // with this scaling the image (with r=50px) will have the propper radius
 	    var gimage = genter.append("g")

@@ -8,6 +8,7 @@ application = Flask(__name__, instance_relative_config=True)
 if __name__=="__main__":
     application.config.from_pyfile('gz_nodes_local.cfg', silent=True)
 else:
+    #application.config.from_pyfile('gz_nodes_local.cfg', silent=True)
     application.config.from_envvar('GZ_NODES_SETTINGS', silent=True)
 mc = PyMongo(application)
 

@@ -116,8 +116,16 @@ class GZ_base:
         if self.debug:
             pprint(s)
         self.get_links(s['_id'])
-        return {'nodes':self.survey.nodes,'links':self.links,'image_url':s['location']['standard'],'ra':s['coords'][0],'dec':s['coords'][1],'gal_name':s['zooniverse_id'],'odd_list':self.odd_list}
+        metadata=scrub_dict(s['metadata'])
+        return {'nodes':self.survey.nodes,'links':self.links,'image_url':s['location']['standard'],'ra':s['coords'][0],'dec':s['coords'][1],'gal_name':s['zooniverse_id'],'odd_list':self.odd_list,'metadata':metadata}
 
+def scrub_dict(d):
+    d={k:v for k,v in d.iteritems() if (v not in [-9999,None,"null"])}
+    for k,v in d.iteritems():
+        if isinstance(v,dict):
+            d[k]=scrub_dict(v)
+    return d
+    
 class GZ2(GZ_base):
     def __init__(self,connect,debug=False):
         self.connect=connect

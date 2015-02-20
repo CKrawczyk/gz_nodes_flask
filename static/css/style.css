@@ -168,6 +168,11 @@ input[type='range']::-moz-focus-outer {
     border: 0;
 }
 
+.modal-dialog {
+    width: 60%;
+    color: #000;
+}
+
 @media (max-width: 1200px) {
     h1 {
         font-size: 54px;
