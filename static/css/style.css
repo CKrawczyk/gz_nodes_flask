@@ -169,7 +169,6 @@ input[type='range']::-moz-focus-outer {
 }
 
 .modal-dialog {
-    width: 60%;
     color: #000;
 }
 
