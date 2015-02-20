@@ -116,11 +116,12 @@ class GZ_base:
         if self.debug:
             pprint(s)
         self.get_links(s['_id'])
-        metadata=scrub_dict(s['metadata'])
+        s_strip={k:v for k,v in s.iteritems() if (k not in ['_id','project_id','location_geo','random','zooniverse_id','group_id','workflow_ids','group'])}
+        metadata=scrub_dict(s_strip)
         return {'nodes':self.survey.nodes,'links':self.links,'image_url':s['location']['standard'],'ra':s['coords'][0],'dec':s['coords'][1],'gal_name':s['zooniverse_id'],'odd_list':self.odd_list,'metadata':metadata}
 
 def scrub_dict(d):
-    d={k:v for k,v in d.iteritems() if (v not in [-9999,None,"null"])}
+    d={k:v for k,v in d.iteritems() if (v not in [-9999,None,"null",-999])}
     for k,v in d.iteritems():
         if isinstance(v,dict):
             d[k]=scrub_dict(v)
