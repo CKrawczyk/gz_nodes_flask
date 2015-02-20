@@ -104,3 +104,6 @@ to indicate what Galaxy Zoo table to search.
 
 *NOTE*: Make sure there are no spaces around the `,` or the script
 will not read in the file correctly.
+
+*Note*: Keep uploaded files size below ~35 KB (~2000 rows) to avoid
+freezing your browser. All file reading/parsing is handeled in client size js.
