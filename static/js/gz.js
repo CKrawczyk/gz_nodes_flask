@@ -35,6 +35,10 @@ window.onresize = function() {
 };
 
 // Hook up buttons
+d3.select("#help").on("click", function() {
+    $('#HelpModal').modal({show:true});
+});
+
 d3.select("#random_gal").on("click",function() {
     updateData('random');
 });
@@ -521,14 +525,14 @@ function updateData(gal_id){
 
         // format the shadow-box for metadata
         function metadata_thumbnail(d) {
-	        $('.modal-body').empty();
+	        $('#meta-body').empty();
             var title = current_gal;
             var metastring = JSON.stringify(metadata,null,2);
             // remove quotes
             metastring = metastring.replace(/\"([^(\")"]+)\"/g,"$1");
-            metastring = metastring.replace(/[,]+/g, "")
-            $('.modal-title').html(title);
-            $('.modal-body').html('<pre class="modal-data">'+metastring+'</pre>');
+            //metastring = metastring.replace(/[,]+/g, "")
+            $('#meta-title').html(title);
+            $('#meta-body').html('<pre class="modal-data">'+metastring+'</pre>');
 	        $('#myModal').modal({show:true});
         };       
         

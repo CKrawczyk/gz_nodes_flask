@@ -2,6 +2,10 @@
     margin-top: 15px;
 }
 
+.gnode {
+    cursor: pointer;
+}
+
 .btn-group-xs > .btn,
 .btn-group-sm > .btn,
 .btn {
@@ -41,8 +45,9 @@ h1 {
 
 .btn-primary:focus,
 .btn-primary.focus,
-.btn-primary.active.focus {
-    outline: 0;
+.btn-primary.active.focus,
+button:focus {
+    outline: 0 !important;
 }
 
 #galaxies,
