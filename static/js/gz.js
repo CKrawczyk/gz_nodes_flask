@@ -500,12 +500,12 @@ function updateData(gal_id){
 	    link = link.data(links_in, function(d) { return d.link_id; });
 	    
 	    // add a path object to each link
-	    link.enter().insert("path", ".gnode")
+	    var lenter = link.enter().insert("path", ".gnode")
             .attr("class", function(d) { return d.is_max ? "link_max" : "link"; })
 	        .attr("d", diagonal)
             .style("stroke-width", function(d) { return .5 * width * Math.sqrt(d.value/Total_value) / 18; });
 
-	    link.append("title")
+	    lenter.append("title")
 	        .text(function(d) { return d.value; })
         
 	    // Exit any old links
