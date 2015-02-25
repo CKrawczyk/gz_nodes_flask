@@ -72,7 +72,7 @@ d3.selectAll("#zoo_buttons > label").on("click", function() {
         d3.select("#upload_dd_cell").attr("style","display: block;");
         upload = true;
         document.getElementById("file_upload").click();
-        //upload_me("/static/data/test.csv");
+        //upload_me("./static/data/test.csv");
     }
     else if (upload || zoo!=val) {
         d3.select("#upload_dd_cell").attr("style","display: none;");
@@ -90,7 +90,7 @@ d3.selectAll("#color_buttons > label").on("click", function() {
     val=d3.select(this).select("input").property("value");
     if (color_theme!=val) {
         color_theme = val;
-        d3.select("#css").attr("href","/static/css/"+color_theme+"_style.css");
+        d3.select("#css").attr("href","./static/css/"+color_theme+"_style.css");
     }
 })
 
@@ -169,7 +169,7 @@ function set_zoo(search) {
     // read in file that maps the answer_id to the 
     // image offset in workflow.png and providing a useful
     // mouse over message
-    d3.json("/static/config/zoo"+zoo+"_offset.json", function(d){
+    d3.json("./static/config/zoo"+zoo+"_offset.json", function(d){
 	    image_offset = d;
 	    updateData(search||'random');
     });
@@ -466,7 +466,7 @@ function updateData(gal_id){
 		        .attr("cy", 0)
 		        .attr("r", 50);
 	        oimage.append("image")
-		        .attr("xlink:href", "/static/images/workflow.png")
+		        .attr("xlink:href", "./static/images/workflow.png")
 		        .attr("x", -50)
 		        .attr("y", function(d) { return -image_offset[d.name][1]*100-50; })
 		        .attr("clip-path", function(d) { return "url(#myClip" + d.name + ")"; })
@@ -474,7 +474,7 @@ function updateData(gal_id){
 		        .attr("height", 4900);
             // add the yes/no image if needed
 	        oimage.append("image")
-	            .attr("xlink:href", "/static/images/workflow.png")
+	            .attr("xlink:href", "./static/images/workflow.png")
 	            .attr("x", -50)
 	            .attr("y", function(d) { 
 		            if (d.name) {
@@ -559,7 +559,7 @@ function updateData(gal_id){
 
 	    // add the inital image to the node
 	    gimage.append("image")
-	        .attr("xlink:href", function(d) { return d.answer_id ? "/static/images/workflow.png" : root.image_url})
+	        .attr("xlink:href", function(d) { return d.answer_id ? "./static/images/workflow.png" : root.image_url})
 	        .attr("x", function(d) { return d.answer_id ? -50: -100; })
 	        .attr("y", function(d) { return d.answer_id ? -image_offset[d.answer_id][1]*100-50 : -100; })
 	        .attr("clip-path", function(d) { return "url(#myClip" + d.node_id + ")"; })
@@ -568,7 +568,7 @@ function updateData(gal_id){
 	    
 	    // add the yes/no image if needed
 	    gimage.append("image")
-	        .attr("xlink:href", "/static/images/workflow.png")
+	        .attr("xlink:href", "./static/images/workflow.png")
 	        .attr("x", -50)
 	        .attr("y", function(d) { 
 		        if (d.answer_id) {
