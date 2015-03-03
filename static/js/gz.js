@@ -40,10 +40,14 @@ d3.select("#help").on("click", function() {
 });
 
 d3.select("#random_gal").on("click",function() {
+    d3.select("#weight_raw_lab").classed({"active":true});
+    d3.select("#weight_weighted_lab").classed({"active":false});
     updateData('random');
 });
 
 d3.select("#galaxies").on("change", function() {
+    d3.select("#weight_raw_lab").classed({"active":true});
+    d3.select("#weight_weighted_lab").classed({"active":false});
 	updateData(this.value);
 });
 
@@ -143,6 +147,8 @@ function upload_me(dataText) {
     });
     // function to update node tree based on selected option
     function dd_change(selected_option) {
+        d3.select("#weight_raw_lab").classed({"active":true});
+        d3.select("#weight_weighted_lab").classed({"active":false});
         $('.selectpicker').selectpicker('render');
         val = selected_option.attr("table").substr(2)
         if (zoo != val) {
@@ -162,9 +168,17 @@ function set_zoo(search) {
     switch (zoo) {
     case "1":
         break;
+    case "2":
+        d3.select("#weight_raw_lab").classed({"active":true});
+        d3.select("#weight_weighted_lab").classed({"disabled":false,"active":false});
+        break;
+    case "3":
+        d3.select("#weight_raw_lab").classed({"active":true});
+        d3.select("#weight_weighted_lab").classed({"disabled":false,"active":false});
+        break;
     default:
-        d3.select("#weight_raw").attr("class","btn btn-primary active");
-	    d3.select("#weight_weighted_lab").attr("class","btn btn-primary disabled");
+        d3.select("#weight_raw_lab").classed({"active":true});
+        d3.select("#weight_weighted_lab").classed({"disabled":true,"active":false});
     }
     // read in file that maps the answer_id to the 
     // image offset in workflow.png and providing a useful
@@ -232,102 +246,7 @@ function updateData(gal_id){
 	    json_callback(d.result)
 	});
 
-    // now that the basics are set up read in the json file
-    var Total_value
-    var current_gal
-    var metadata
-    function json_callback(answers) { 
-	    // draw the galaxy image
-	    $(".galaxy-image").attr("src", answers.image_url);
-	    // Add text for RA and DEC
-	    d3.select("#ra_dec")
-	        .text("RA: " + parseFloat(answers.ra).toFixed(3) + ", DEC:" + parseFloat(answers.dec).toFixed(3))
-
-        metadata = answers.metadata;
-        current_gal = answers.gal_name;
-        // make sure reset button returns same object
-        function reset_data(){
-	        updateData(current_gal);
-        }
-        d3.select("#reset_button").on("click", reset_data)
-        
-	    // make sure dropdown list matches this id (useful for refresh)
-	    d3.select("#galaxies").property("value",answers.gal_name)
-	    root = answers;
-	    // make sure to minpulate data *before* the update loop
-	    // add a list of source and target Links to each node
-	    root.nodes.forEach(function(node) {
-	        node.sourceLinks = [];
-	        // _sourceLinks will be used to toggle links on and off
-	        node._sourceLinks = [];
-	        node.targetLinks = [];
-	    });
-	    root.links.forEach(function(link, i) {
-	        // give each link a unique id
-	        link.link_id = i;
-	        link.is_max = false;
-	        var source = link.source,
-		        target = link.target;
-	        if (typeof source === "number") source = link.source = root.nodes[link.source];
-	        if (typeof target === "number") target = link.target = root.nodes[link.target];
-	        source.sourceLinks.push(link);
-	        target.targetLinks.push(link);
-	    });
-	    // Get the number of votes for each node
-	    root.nodes.forEach(function(node) {
-	        node.value = Math.max(
-		        d3.sum(node.sourceLinks, function(L) {return L.value}),
-		        d3.sum(node.targetLinks, function(L) {return L.value})
-	        );
-	    });
-	    var max_nodes=[root.nodes[0]]
-	    function max_path(node) {
-	        if (node.sourceLinks.length>0) {
-		        link_values=[]
-		        node.sourceLinks.forEach(function(d) { link_values.push(d.value); });
-		        idx_max = link_values.indexOf(Math.max.apply(Math, link_values));
-		        node.sourceLinks[idx_max].is_max = true;
-		        max_nodes.push(node.sourceLinks[idx_max].target)
-		        max_path(node.sourceLinks[idx_max].target);
-	        }
-	    };
-	    // Find the links along the max vote path
-	    max_path(root.nodes[0]);
-	    
-	    // Normalize votes by total number
-	    Total_value=root.nodes[0].value
-	    root.nodes.forEach(function(node, i) {
-	        node.value /= Total_value;
-	        // set the radius such that 9 full sized nodes could fit
-	        node.radius = (1-2*.07) * width * Math.sqrt(node.value) / 18;
-	        node.node_id = i;
-	    });     
-	    // get the x position for each node
-	    computeNodeBreadths(root);
-	    // find how deep the tree goes and set the linkDistance to match 
-	    max_level = d3.max(root.nodes, function(d) {return d.fixed_level; });
-	    force.linkDistance(.8*width/(max_level + 1));
-	    
-	    // good starting points
-	    root.nodes.forEach(function(d , i) {
-	        d.x = d.fixed_x;
-	        // find if smooth or spiral is voted the most
-	        // and put that group on top
-	        if (root.nodes[1].value > root.nodes[2].value) { 
-		        j = 1;
-	        } else {
-		        j = -1;
-	        }
-	        // set the y position such that higher vote values
-	        // are on top, and (to a lesser extent) the groups
-	        // stay together
-	        d.y = (1 - d.value + j * d.group/10) * height/2;
-	    });
-	    // fix the first node so it does not move
-	    root.nodes[0].radius = .07 * width
-	    root.nodes[0].x = root.nodes[0].radius;
-	    root.nodes[0].y = height/2;
-	    root.nodes[0].fixed = true;
+    function add_breadcrumb(max_nodes,idx) {
 	    // Add breadcrumb trail for max_path
 	    // Breadcrumb dimensions: width, height, spacing, width of tip/tail.
 	    var b = { h: 20, s: 3, t: 15 };
@@ -373,6 +292,7 @@ function updateData(gal_id){
 	        }
 	        return points.join(" ");
 	    }
+        d3.select("#sequence").select("svg").remove();
 	    var trail = d3.select("#sequence").append("svg:svg")
 	        .attr("width", width)
 	        .attr("height", b.h)
@@ -387,7 +307,13 @@ function updateData(gal_id){
 	        .attr("y", 0 )
 	        .attr("dy", "1em")
 	        .attr("text-anchor", "middle")
-	        .text(function(d) { return image_offset[d.answer_id][0] + ": " + Math.round(d.value*Total_value); });
+	        .text(function(d) {
+                if (d._value[idx] % 1 === 0) {
+                    return image_offset[d.answer_id][0] + ": " + d._value[idx];
+                } else {
+                    return image_offset[d.answer_id][0] + ": " + d._value[idx].toFixed(3);
+                }
+            });
 	    g_bc.selectAll("text")
 	        .call(wrap, b.w-2*b.t);
 	    b['h'] = 20 * max_height;
@@ -399,6 +325,126 @@ function updateData(gal_id){
 	        return "translate(" + i * (b.w + b.s) + ", 0)";
 	    });
 	    g_bc.exit().remove();
+    }
+    
+    // now that the basics are set up read in the json file
+    var Total_value
+    var _Total_value
+    var current_gal
+    var metadata
+    var _max_nodes
+    function json_callback(answers) { 
+	    // draw the galaxy image
+	    $(".galaxy-image").attr("src", answers.image_url);
+	    // Add text for RA and DEC
+	    d3.select("#ra_dec")
+	        .text("RA: " + parseFloat(answers.ra).toFixed(3) + ", DEC:" + parseFloat(answers.dec).toFixed(3))
+
+        metadata = answers.metadata;
+        current_gal = answers.gal_name;
+        // make sure reset button returns same object
+        function reset_data(){
+	        updateData(current_gal);
+        }
+        d3.select("#reset_button").on("click", reset_data)
+        
+	    // make sure dropdown list matches this id (useful for refresh)
+	    d3.select("#galaxies").property("value",answers.gal_name)
+	    root = answers;
+	    // make sure to minpulate data *before* the update loop
+	    // add a list of source and target Links to each node
+	    root.nodes.forEach(function(node) {
+	        node.sourceLinks = [];
+	        // _sourceLinks will be used to toggle links on and off
+	        node._sourceLinks = [];
+	        node.targetLinks = [];
+	    });
+	    root.links.forEach(function(link, i) {
+	        // give each link a unique id
+	        link.link_id = i;
+	        link.is_max = false;
+            link._is_max = [false, false];
+	        var source = link.source,
+		        target = link.target;
+	        if (typeof source === "number") source = link.source = root.nodes[link.source];
+	        if (typeof target === "number") target = link.target = root.nodes[link.target];
+	        source.sourceLinks.push(link);
+	        target.targetLinks.push(link);
+	    });
+	    // Get the number of votes for each node
+	    root.nodes.forEach(function(node) {
+	        node.value = Math.max(
+		        d3.sum(node.sourceLinks, function(L) {return L.value}),
+		        d3.sum(node.targetLinks, function(L) {return L.value})
+	        );
+            node.wvalue = Math.max(
+		        d3.sum(node.sourceLinks, function(L) {return L._value[1]}),
+		        d3.sum(node.targetLinks, function(L) {return L._value[1]})
+	        );
+	    });
+
+        _max_nodes=[[root.nodes[0]],[root.nodes[0]]]
+	    function max_path(node,vdx) {
+	        if (node.sourceLinks.length>0) {
+		        link_values=[]
+		        node.sourceLinks.forEach(function(d) { link_values.push(d._value[vdx]); });
+		        idx_max = link_values.indexOf(Math.max.apply(Math, link_values));
+                if (vdx==0) {
+		            node.sourceLinks[idx_max].is_max = true;
+                };
+                node.sourceLinks[idx_max]._is_max[vdx] = true;
+		        _max_nodes[vdx].push(node.sourceLinks[idx_max].target)
+		        max_path(node.sourceLinks[idx_max].target,vdx);
+	        }
+	    };
+	    // Find the links along the max vote path
+	    max_path(root.nodes[0],0);
+        max_path(root.nodes[0],1);
+        var max_nodes=_max_nodes[0]
+	    
+	    // Normalize votes by total number
+	    Total_value=root.nodes[0].value
+        _Total_value=[Total_value, root.nodes[0].wvalue]
+	    root.nodes.forEach(function(node, i) {
+            node._value = [node.value, node.wvalue]
+	        node.value /= Total_value;
+            //node._values[0] /= _Total_value[0];
+            node.wvalue /= _Total_value[1];
+	        // set the radius such that 9 full sized nodes could fit
+	        node.radius = (1-2*.07) * width * Math.sqrt(node.value) / 18;
+            node._radius = [node.radius, (1-2*.07) * width * Math.sqrt(node.wvalue) / 18];
+	        node.node_id = i;
+	    });     
+	    // get the x position for each node
+	    computeNodeBreadths(root);
+	    // find how deep the tree goes and set the linkDistance to match 
+	    max_level = d3.max(root.nodes, function(d) {return d.fixed_level; });
+	    force.linkDistance(.8*width/(max_level + 1));
+	    
+	    // good starting points
+	    root.nodes.forEach(function(d , i) {
+	        d.x = d.fixed_x;
+	        // find if smooth or spiral is voted the most
+	        // and put that group on top
+	        if (root.nodes[1].value > root.nodes[2].value) { 
+		        j = 1;
+	        } else {
+		        j = -1;
+	        }
+	        // set the y position such that higher vote values
+	        // are on top, and (to a lesser extent) the groups
+	        // stay together
+	        d.y = (1 - d.value + j * d.group/10) * height/2;
+	    });
+	    // fix the first node so it does not move
+	    root.nodes[0].radius = .07 * width
+        root.nodes[0]._radius = [.07 * width, .07 * width]
+	    root.nodes[0].x = root.nodes[0].radius;
+	    root.nodes[0].y = height/2;
+	    root.nodes[0].fixed = true;
+
+        // add breadcrumbs
+        add_breadcrumb(max_nodes,0);
 	    // run the call-back function to update positions
 	    update(root.nodes, root.links);
     };
@@ -435,7 +481,9 @@ function updateData(gal_id){
 
 	        root.odd_list.forEach(function(d) {
 		        value = d.value / Total_value;
+                wvalue = d._value[1] / _Total_value[1]
 		        d.radius = width * (1-2*.07) * Math.sqrt(value) / 18
+                d._radius = [d.radius, width * (1-2*.07) * Math.sqrt(wvalue) / 18]
 	        });
 	        
 	        onode = onode.data(root.odd_list, function(d) { return d.name });
@@ -487,7 +535,7 @@ function updateData(gal_id){
 	            .attr("width", 100)
 	            .attr("height", 4900)
 	            .attr("opacity", .35);
-	        oenter.append("title")
+	        var omouse_over = oenter.append("title")
 		        .text(function(d) { return image_offset[d.name][0] + ": " + d.value; });
 	    }
 	    // add the nodes and links to the tree
@@ -505,7 +553,7 @@ function updateData(gal_id){
 	        .attr("d", diagonal)
             .style("stroke-width", function(d) { return .5 * width * Math.sqrt(d.value/Total_value) / 18; });
 
-	    lenter.append("title")
+	    var lmouse_over = lenter.append("title")
 	        .text(function(d) { return d.value; })
         
 	    // Exit any old links
@@ -591,19 +639,38 @@ function updateData(gal_id){
 	    //for (var i = 500; i > 0; --i) force.tick();
 	    //force.stop();
         
-	    d3.select("#weight_raw").on("change", function() { set_weight(0); })
-	    d3.select("#weight_weighted").on("change", function() { set_weight(1); })
-	    d3.select("#weight_bias").on("change", function() { set_weight(2); })
+	    d3.select("#weight_raw_lab").on("click", function() { set_weight(0); })
+	    d3.select("#weight_weighted_lab").on("click", function() { set_weight(1); })
 
 	    // call-back to swap weighting
 	    function set_weight(idx) {
 	        root.nodes.forEach(function(n) {
 		        n.radius = n._radius[idx];
-		        n.value = n._values[idx];
+		        n.value = n._value[idx]/_Total_value[idx];
 		        gimage.attr("transform", function(d) { return d.answer_id ? "scale(" + d.radius/50 + ")" : "scale(" + d.radius/100 + ")"; });
-		        link.style("stroke-width", function(d) { return .5 * Math.min(d.target.radius, d.source.radius); });
-		        mouse_over.text(function(d) { return image_offset[d.answer_id][0] + ": " + d.votes[idx]; })
-	        });
+		        link.style("stroke-width", function(d) { return .5 * width * Math.sqrt(d._value[idx]/_Total_value[idx]) / 18; });                
+                mouse_over.text(function(d) {
+                    if (d._value[idx] % 1 === 0) {
+                        return image_offset[d.answer_id][0] + ": " + d._value[idx];
+                    } else {
+                        return image_offset[d.answer_id][0] + ": " + d._value[idx].toFixed(3);
+                    }
+                });
+                lmouse_over.text(function(d) {
+                    if (d._value[idx] % 1 === 0) {
+                        return d._value[idx];
+                    } else {
+                        return d._value[idx].toFixed(3);
+                    }
+	            });
+            });
+            add_breadcrumb(_max_nodes[idx],idx);
+            root.odd_list.forEach(function(o) {
+                o.radius = o._radius[idx];
+                o.value = o._value[idx];
+                oimage.attr("transform", function(d) { return "scale(" + d.radius/50 + ")" });
+                omouse_over.text(function(d) { return image_offset[d.name][0] + ": " + d._value[idx]; })
+            });
 	        update_charge(d3.select("#slider_charge").property("value"));
 	    }
 
