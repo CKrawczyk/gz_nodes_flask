@@ -553,7 +553,7 @@ function updateData(gal_id){
 	    
 	    // add a path object to each link
 	    var lenter = link.enter().insert("path", ".gnode")
-            .attr("class", function(d) { return d.is_max ? "link_max" : "link"; })
+            .attr("class", function(d) { return d.is_max ? "link link_max" : "link"; })
 	        .attr("d", diagonal)
             .style("stroke-width", function(d) { return .5 * width * Math.sqrt(d.value/Total_value) / 18; });
 
@@ -657,6 +657,9 @@ function updateData(gal_id){
 		            n.radius = n._radius[idx];
 		            n.value = n._value[idx]/_Total_value[idx];
                 });
+                root.links.forEach(function(l) {
+                    l.is_max=l._is_max[idx];
+                });
                 gimage = svg.selectAll(".gimage");
 		        gimage.attr("transform", function(d) { return d.answer_id ? "scale(" + d._radius[idx]/50 + ")" : "scale(" + d._radius[idx]/100 + ")"; });
 		        link.style("stroke-width", function(d) { return .5 * width * Math.sqrt(d._value[idx]/_Total_value[idx]) / 18; });
@@ -677,6 +680,7 @@ function updateData(gal_id){
                     }
 	            });
                 add_breadcrumb(_max_nodes[idx],idx);
+                d3.selectAll(".link").attr("class", function(d) { return d.is_max ? "link link_max" : "link"; });
                 root.odd_list.forEach(function(o) {
                     o.radius = o._radius[idx];
                     o.value = o._value[idx];
