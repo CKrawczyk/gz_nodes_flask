@@ -333,6 +333,7 @@ function updateData(gal_id){
     var current_gal
     var metadata
     var _max_nodes
+    var weight_state=0
     function json_callback(answers) { 
 	    // draw the galaxy image
 	    $(".galaxy-image").attr("src", answers.image_url);
@@ -344,6 +345,8 @@ function updateData(gal_id){
         current_gal = answers.gal_name;
         // make sure reset button returns same object
         function reset_data(){
+            d3.select("#weight_raw_lab").classed({"active":true});
+            d3.select("#weight_weighted_lab").classed({"active":false});
 	        updateData(current_gal);
         }
         d3.select("#reset_button").on("click", reset_data)
@@ -644,36 +647,38 @@ function updateData(gal_id){
 
 	    // call-back to swap weighting
 	    function set_weight(idx) {
-	        root.nodes.forEach(function(n) {
-		        n.radius = n._radius[idx];
-		        n.value = n._value[idx]/_Total_value[idx];
-		        gimage.attr("transform", function(d) { return d.answer_id ? "scale(" + d.radius/50 + ")" : "scale(" + d.radius/100 + ")"; });
-		        link.style("stroke-width", function(d) { return .5 * width * Math.sqrt(d._value[idx]/_Total_value[idx]) / 18; });                
-                mouse_over.text(function(d) {
-                    if (d._value[idx] % 1 === 0) {
-                        return image_offset[d.answer_id][0] + ": " + d._value[idx];
-                    } else {
-                        return image_offset[d.answer_id][0] + ": " + d._value[idx].toFixed(3);
-                    }
+            if (weight_state!=idx) {
+                weight_state=idx;
+	            root.nodes.forEach(function(n) {
+		            n.radius = n._radius[idx];
+		            n.value = n._value[idx]/_Total_value[idx];
+		            gimage.attr("transform", function(d) { return d.answer_id ? "scale(" + d.radius/50 + ")" : "scale(" + d.radius/100 + ")"; });
+		            link.style("stroke-width", function(d) { return .5 * width * Math.sqrt(d._value[idx]/_Total_value[idx]) / 18; });                
+                    mouse_over.text(function(d) {
+                        if (d._value[idx] % 1 === 0) {
+                            return image_offset[d.answer_id][0] + ": " + d._value[idx];
+                        } else {
+                            return image_offset[d.answer_id][0] + ": " + d._value[idx].toFixed(3);
+                        }
+                    });
+                    lmouse_over.text(function(d) {
+                        if (d._value[idx] % 1 === 0) {
+                            return d._value[idx];
+                        } else {
+                            return d._value[idx].toFixed(3);
+                        }
+	                });
                 });
-                lmouse_over.text(function(d) {
-                    if (d._value[idx] % 1 === 0) {
-                        return d._value[idx];
-                    } else {
-                        return d._value[idx].toFixed(3);
-                    }
-	            });
-            });
-            add_breadcrumb(_max_nodes[idx],idx);
-            root.odd_list.forEach(function(o) {
-                o.radius = o._radius[idx];
-                o.value = o._value[idx];
-                oimage.attr("transform", function(d) { return "scale(" + d.radius/50 + ")" });
-                omouse_over.text(function(d) { return image_offset[d.name][0] + ": " + d._value[idx]; })
-            });
-	        update_charge(d3.select("#slider_charge").property("value"));
-	    }
-
+                add_breadcrumb(_max_nodes[idx],idx);
+                root.odd_list.forEach(function(o) {
+                    o.radius = o._radius[idx];
+                    o.value = o._value[idx];
+                    oimage.attr("transform", function(d) { return "scale(" + d.radius/50 + ")" });
+                    omouse_over.text(function(d) { return image_offset[d.name][0] + ": " + d._value[idx]; })
+                });
+	            update_charge(d3.select("#slider_charge").property("value"));
+	        }
+        }
 	    // call-back to set how the nodes will move
 	    function tick(e) {
 	        // make sure the force gets smaller as the simulation runs
