@@ -462,9 +462,8 @@ function updateData(gal_id){
     // select the link and gnode objects
     var link = svg.selectAll(".link"),
 	    gnode = svg.selectAll(".gnode");
-
+    
     var first_draw = true;
-
     // create the update function to draw the tree
     function update(nodes_in, links_in) {
 	    // Set data as node ids
@@ -497,6 +496,7 @@ function updateData(gal_id){
 		        .attr("class","onode")
 		    
 	        var oimage = oenter.append("g")
+                .attr("class", "oimage")
 		        .attr("transform", function(d) { return "scale(" + d.radius/50 + ")" });
 
 	        odd_answers1.attr("height",2*Math.ceil(root.odd_list[0].radius) + margin.top + margin.bottom);
@@ -538,7 +538,8 @@ function updateData(gal_id){
 	            .attr("width", 100)
 	            .attr("height", 4900)
 	            .attr("opacity", .35);
-	        var omouse_over = oenter.append("title")
+	        omouse_over = oenter.append("title")
+                .attr("class", "omouse_over")
 		        .text(function(d) { return image_offset[d.name][0] + ": " + d.value; });
 	    }
 	    // add the nodes and links to the tree
@@ -557,6 +558,7 @@ function updateData(gal_id){
             .style("stroke-width", function(d) { return .5 * width * Math.sqrt(d.value/Total_value) / 18; });
 
 	    var lmouse_over = lenter.append("title")
+            .attr("class", "lmouse_over")
 	        .text(function(d) { return d.value; })
         
 	    // Exit any old links
@@ -590,6 +592,7 @@ function updateData(gal_id){
 	    // add a group to the node to scale it
 	    // with this scaling the image (with r=50px) will have the propper radius
 	    var gimage = genter.append("g")
+            .attr("class", "gimage")
 	        .attr("transform", function(d) { return d.answer_id ? "scale(" + d.radius/50 + ")" : "scale(" + d.radius/100 + ")"; })
 
 	    // add a clipPath for a circle to corp the node image
@@ -635,6 +638,7 @@ function updateData(gal_id){
 
 	    // add the mouse over text
 	    var mouse_over = genter.append("title")
+            .attr("class","mouse_over")
 	        .text(function(d) { return image_offset[d.answer_id][0] + ": " + Math.round(d.value*Total_value); })
         
 	    // start the nodes moving
@@ -644,7 +648,7 @@ function updateData(gal_id){
         
 	    d3.select("#weight_raw_lab").on("click", function() { set_weight(0); })
 	    d3.select("#weight_weighted_lab").on("click", function() { set_weight(1); })
-
+        
 	    // call-back to swap weighting
 	    function set_weight(idx) {
             if (weight_state!=idx) {
@@ -652,30 +656,35 @@ function updateData(gal_id){
 	            root.nodes.forEach(function(n) {
 		            n.radius = n._radius[idx];
 		            n.value = n._value[idx]/_Total_value[idx];
-		            gimage.attr("transform", function(d) { return d.answer_id ? "scale(" + d.radius/50 + ")" : "scale(" + d.radius/100 + ")"; });
-		            link.style("stroke-width", function(d) { return .5 * width * Math.sqrt(d._value[idx]/_Total_value[idx]) / 18; });                
-                    mouse_over.text(function(d) {
-                        if (d._value[idx] % 1 === 0) {
-                            return image_offset[d.answer_id][0] + ": " + d._value[idx];
-                        } else {
-                            return image_offset[d.answer_id][0] + ": " + d._value[idx].toFixed(3);
-                        }
-                    });
-                    lmouse_over.text(function(d) {
-                        if (d._value[idx] % 1 === 0) {
-                            return d._value[idx];
-                        } else {
-                            return d._value[idx].toFixed(3);
-                        }
-	                });
                 });
+                gimage = svg.selectAll(".gimage");
+		        gimage.attr("transform", function(d) { return d.answer_id ? "scale(" + d._radius[idx]/50 + ")" : "scale(" + d._radius[idx]/100 + ")"; });
+		        link.style("stroke-width", function(d) { return .5 * width * Math.sqrt(d._value[idx]/_Total_value[idx]) / 18; });
+                mouse_over = svg.selectAll(".mouse_over");
+                mouse_over.text(function(d) {
+                    if (d._value[idx] % 1 === 0) {
+                        return image_offset[d.answer_id][0] + ": " + d._value[idx];
+                    } else {
+                        return image_offset[d.answer_id][0] + ": " + d._value[idx].toFixed(3);
+                    }
+                });
+                lmouse_over = svg.selectAll(".lmouse_over")
+                lmouse_over.text(function(d) {
+                    if (d._value[idx] % 1 === 0) {
+                        return d._value[idx];
+                    } else {
+                        return d._value[idx].toFixed(3);
+                    }
+	            });
                 add_breadcrumb(_max_nodes[idx],idx);
                 root.odd_list.forEach(function(o) {
                     o.radius = o._radius[idx];
                     o.value = o._value[idx];
-                    oimage.attr("transform", function(d) { return "scale(" + d.radius/50 + ")" });
-                    omouse_over.text(function(d) { return image_offset[d.name][0] + ": " + d._value[idx]; })
                 });
+                oimage = svg.selectAll(".oimage")
+                oimage.attr("transform", function(d) { return "scale(" + d.radius/50 + ")" });
+                omouse_over = svg.selectAll(".omouse_over")
+                omouse_over.text(function(d) { return image_offset[d.name][0] + ": " + d._value[idx]; })
 	            update_charge(d3.select("#slider_charge").property("value"));
 	        }
         }
