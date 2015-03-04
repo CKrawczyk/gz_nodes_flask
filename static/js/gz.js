@@ -581,11 +581,16 @@ function updateData(gal_id){
 	        $('#meta-body').empty();
             var title = current_gal;
             var metastring = JSON.stringify(metadata,null,2);
+            var talk_link = root.talk
             // remove quotes
             metastring = metastring.replace(/\"([^(\")"]+)\"/g,"$1");
             //metastring = metastring.replace(/[,]+/g, "")
             $('#meta-title').html(title);
-            $('#meta-body').html('<pre class="modal-data">'+metastring+'</pre>');
+            if (talk_link) {
+                $('#meta-body').html('<p>Talk link: <a href='+talk_link+' target="_blank">'+talk_link+'</a></p> <pre class="modal-data">'+metastring+'</pre>');
+            } else {
+                $('#meta-body').html('<pre class="modal-data">'+metastring+'</pre>');
+            }
 	        $('#myModal').modal({show:true});
         };       
         

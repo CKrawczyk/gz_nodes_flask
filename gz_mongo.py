@@ -143,7 +143,11 @@ class GZ_base:
             all_odd[-1]['_value']=[r['value'],w['value']]
         s_strip={k:v for k,v in s.iteritems() if (k not in ['_id','project_id','location_geo','random','zooniverse_id','group_id','workflow_ids','group'])}
         metadata=scrub_dict(s_strip)
-        return {'nodes':self.survey.nodes,'links':all_links,'links_weight':self.links_weight,'image_url':s['location']['standard'],'ra':s['coords'][0],'dec':s['coords'][1],'gal_name':s['zooniverse_id'],'odd_list':all_odd,'metadata':metadata}
+        if self.survey_name in ['sloan','ukidss','ferengi','candels']:
+            talk='http://talk.galaxyzoo.org/#/subjects/'+s['zooniverse_id']
+        else:
+            talk=''
+        return {'nodes':self.survey.nodes,'links':all_links,'links_weight':self.links_weight,'image_url':s['location']['standard'],'ra':s['coords'][0],'dec':s['coords'][1],'gal_name':s['zooniverse_id'],'odd_list':all_odd,'metadata':metadata,'talk':talk}
 
 def scrub_dict(d):
     d={k:v for k,v in d.iteritems() if (v not in [-9999,None,"null",-999])}
