@@ -449,33 +449,33 @@ function updateData(gal_id){
 
     function set_size_and_text(Total_value) {
         // function to set the sizes and mouse overs for everything
-        gimage = d3.selectAll(".gimage");
-        link = d3.selectAll(".link");
-        oimage = d3.selectAll(".oimage");
-        mouse_over = d3.selectAll(".mouse_over");
-        lmouse_over = d3.selectAll(".lmouse_over");
-        omouse_over = d3.selectAll(".omouse_over");
+        gimage_L = d3.selectAll(".gimage");
+        link_L = d3.selectAll(".link");
+        oimage_L = d3.selectAll(".oimage");
+        mouse_over_L = d3.selectAll(".mouse_over");
+        lmouse_over_L = d3.selectAll(".lmouse_over");
+        omouse_over_L = d3.selectAll(".omouse_over");
         
-		gimage.attr("transform", function(d) { return d.answer_id ? "scale(" + d.radius/50 + ")" : "scale(" + d.radius/100 + ")"; });
-        oimage.attr("transform", function(d) { return "scale(" + d.radius/50 + ")"; });
-		link.style("stroke-width", function(d) { return .5 * width * Math.sqrt(d.value/Total_value) / 18; });
-        link.attr("class", function(d) { return d.is_max ? "link link_max" : "link"; });
+		gimage_L.attr("transform", function(d) { return d.answer_id ? "scale(" + d.radius/50 + ")" : "scale(" + d.radius/100 + ")"; });
+        oimage_L.attr("transform", function(d) { return "scale(" + d.radius/50 + ")"; });
+		link_L.style("stroke-width", function(d) { return .5 * width * Math.sqrt(d.value/Total_value) / 18; });
+        link_L.attr("class", function(d) { return d.is_max ? "link link_max" : "link"; });
         
-        mouse_over.text(function(d) {
+        mouse_over_L.text(function(d) {
             if (d.value_raw % 1 === 0) {
                 return image_offset[d.answer_id][0] + ": " + d.value_raw;
             } else {
                 return image_offset[d.answer_id][0] + ": " + d.value_raw.toFixed(3);
             }
         });
-        lmouse_over.text(function(d) {
+        lmouse_over_L.text(function(d) {
             if (d.value % 1 === 0) {
                 return d.value;
             } else {
                 return d.value.toFixed(3);
             }
 	    });
-        omouse_over.text(function(d) {
+        omouse_over_L.text(function(d) {
             if (d.value % 1 === 0) {
                 return image_offset[d.name][0] + ": " + d.value;
             } else {
@@ -536,8 +536,8 @@ function updateData(gal_id){
 	    .projection(function(d) {return [d.y, d.x]; });
 
     // select the link and gnode objects
-    var link = svg.selectAll(".link"),
-	    gnode = svg.selectAll(".gnode");
+    var link = svg.selectAll(".link");
+	var gnode = svg.selectAll(".gnode");
 
     var first_draw = true;
     var first_size = true;
@@ -547,6 +547,7 @@ function updateData(gal_id){
         var n_odd_nodes = root.odd_list.length;
         
         if (n_odd_nodes > 0 && first_draw) {
+            first_draw = false;
 	        // place for the "odd" answers to go
 	        var odd_answers1 = d3.select("#odd").append("svg")
 		        .attr("width",width + margin.left + margin.right)
@@ -611,8 +612,7 @@ function updateData(gal_id){
 	            .attr("width", 100)
 	            .attr("height", 4900)
 	            .attr("opacity", .35);
-	        omouse_over = oenter.append("title")
-                .attr("class", "omouse_over")
+	        omouse_over = oenter.append("title").attr("class", "omouse_over");
 	    }
         
 	    // Set data as node ids        
@@ -630,7 +630,7 @@ function updateData(gal_id){
             .attr("class", function(d) { return d.is_max ? "link link_max" : "link"; })
 	        .attr("d", diagonal);
 
-	    var lmouse_over = lenter.append("title").attr("class", "lmouse_over")
+	    var lmouse_over = lenter.append("title").attr("class", "lmouse_over");
         
 	    // Exit any old links
 	    link.exit().remove();
@@ -841,6 +841,7 @@ function updateData(gal_id){
 	    };
 	    recurse(root.nodes[0]);
 	    // update the nodes
+        first_size = true;
 	    update(current_nodes, current_links);
     };
 };
