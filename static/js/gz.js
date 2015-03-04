@@ -538,25 +538,26 @@ function updateData(gal_id){
     // select the link and gnode objects
     var link = svg.selectAll(".link"),
 	    gnode = svg.selectAll(".gnode");
-
+    
     var first_draw = true;
     var first_size = true;
     // create the update function to draw the tree
     function update(nodes_in, links_in) {
-        // draw odd nodes
-        var n_odd_nodes = root.odd_list.length;
-        
-        if (n_odd_nodes > 0 && first_draw) {
+	    // Set data as node ids
+	    var n_odd_nodes = root.odd_list.length
+	    
+	    if (first_draw & n_odd_nodes > 0) {
 	        // place for the "odd" answers to go
+	        first_draw = false;
 	        var odd_answers1 = d3.select("#odd").append("svg")
 		        .attr("width",width + margin.left + margin.right)
 		        .attr("height",(width-2*.07)/9 + margin.top + margin.bottom)
-            
+
 	        var odd_answers = odd_answers1.append("g")
 		        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-            
+
 	        var onode = odd_answers.selectAll(".onode");
-            
+
 	        root.odd_list.forEach(function(d) {
 		        value = d.value / Total_value;
                 wvalue = d._value[1] / _Total_value[1]
@@ -568,10 +569,12 @@ function updateData(gal_id){
 	        // Exit old nodes
 	        onode.exit().remove();
 	        
-	        var oenter = onode.enter().append("g").attr("class","onode");
+	        var oenter = onode.enter().append("g")
+		        .attr("class","onode")
 		    
-	        var oimage = oenter.append("g").attr("class", "oimage");
-            
+	        var oimage = oenter.append("g")
+                .attr("class", "oimage")
+
 	        odd_answers1.attr("height",2*Math.ceil(root.odd_list[0].radius) + margin.top + margin.bottom);
 	        oenter.attr("transform", function(d,i) {
 		        return 'translate(' + [width*(i+.5)/n_odd_nodes, Math.ceil(root.odd_list[0].radius)] + ')'; 
@@ -615,7 +618,6 @@ function updateData(gal_id){
                 .attr("class", "omouse_over")
 	    }
         
-	    // Set data as node ids        
 	    // add the nodes and links to the tree
 	    force
 	        .nodes(nodes_in)
@@ -628,9 +630,12 @@ function updateData(gal_id){
 	    // add a path object to each link
 	    var lenter = link.enter().insert("path", ".gnode")
             .attr("class", function(d) { return d.is_max ? "link link_max" : "link"; })
-	        .attr("d", diagonal);
+	        .attr("d", diagonal)
+            //.style("stroke-width", function(d) { return .5 * width * Math.sqrt(d.value/Total_value) / 18; });
 
-	    var lmouse_over = lenter.append("title").attr("class", "lmouse_over")
+	    var lmouse_over = lenter.append("title")
+            .attr("class", "lmouse_over")
+	        //.text(function(d) { return d.value; })
         
 	    // Exit any old links
 	    link.exit().remove();
@@ -649,7 +654,8 @@ function updateData(gal_id){
         
 	    // add a group to the node to scale it
 	    // with this scaling the image (with r=50px) will have the propper radius
-	    var gimage = genter.append("g").attr("class", "gimage");
+	    var gimage = genter.append("g")
+            .attr("class", "gimage")
 
 	    // add a clipPath for a circle to corp the node image
 	    gimage.append("defs")
