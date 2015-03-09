@@ -160,6 +160,10 @@ svg {
         display: none;
 }
 
+.popover {
+    color: #000;
+}
+
 input[type='range']::-moz-range-track {
     -moz-appearance: none;
     border-radius: 30px;
