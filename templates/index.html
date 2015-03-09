@@ -114,7 +114,11 @@
         <div class="col-lg-2 col-lg-offset-2 col-sm-3">
           <div class="row">
             <div class="col-md-12">
-              <label for="slider_charge" class="slider_label">Charge: <span id="slider_charge_value">...</span></label>
+              <label for="slider_charge" class="slider_label">
+                <a href="#" data-toggle="popover" data-placement="top" title="Charge" data-content="How much the nodes repel each other.">
+                  Charge:
+                </a> <span id="slider_charge_value">...</span>
+              </label>
             </div>
             <div class="col-md-12">
               <input type="range" min="1" max="5" value="2.5" step="0.01" id="slider_charge" />
@@ -125,7 +129,11 @@
         <div class="col-lg-2 col-sm-3">
           <div class="row">
             <div class="col-md-12">
-              <label for="slider_strength" class="slider_label">Link Strength: <span id="slider_strength_value">...</span></label>
+              <label for="slider_strength" class="slider_label">
+                <a href="#" data-toggle="popover" data-placement="top" title="Link Strength" data-content="How 'stiff' the links between the nodes are.">
+                  Link Strength:
+                </a><span id="slider_strength_value">...</span>
+              </label>
             </div>
             <div class="col-md-12">
               <input type="range" min="0" max="1" value="1" step="0.01" id="slider_strength" />
@@ -136,7 +144,11 @@
         <div class="col-lg-2 col-sm-3">
           <div class="row">
             <div class="col-md-12">
-              <label for="slider_friction" class="slider_label">Friction: <span id="slider_friction_value">...</span></label>
+              <label for="slider_friction" class="slider_label">
+                <a href="#" data-toggle="popover" data-placement="top" title="Friction" data-content="How damped the node movement is (0=frictionless, 1=no movement).">
+                  Friction:
+                </a> <span id="slider_friction_value">...</span>
+              </label>
             </div>
             <div class="col-md-12">
               <input type="range" min="0" max="1" value="0.2" step="0.01" id="slider_friction" />
@@ -154,6 +166,10 @@
         <a class="pull-left" href="http://www.zooniverse.org" target="_blank" rel="author">Zooniverse</a>
       </footer>
 
+      <div id="node_tooltip" class="hidden">
+        
+      </div>
+      
       <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
@@ -255,7 +271,7 @@ AGZ0007to6,gz4_f
 
               <h3>Future plans:</h3>
               <ul>
-                <li>Swapping between vote weighting schemes (toggle buttons currently disabled)</li>
+                <li>Visualizing the vote path for a "collection" of galaxies.</li>
               </ul>
 
               <h3>Other information:</h3>

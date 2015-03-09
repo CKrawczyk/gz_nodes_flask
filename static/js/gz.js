@@ -27,6 +27,18 @@ function resize_window() {
     }
 };
 
+$('[data-toggle="tooltip"]').tooltip();
+$('[data-toggle="popover"]').popover();
+$('body').on('click', function (e) {
+    $('[data-toggle="popover"]').each(function () {
+        //the 'is' for buttons that trigger popups
+        //the 'has' for icons within a button that triggers a popup
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+            $(this).popover('hide');
+        }
+    });
+});
+
 // wait for re-size event to be over before re-drawing
 var doit;
 window.onresize = function() {
@@ -447,41 +459,16 @@ function updateData(gal_id){
 	    update(root.nodes, root.links);
     };
 
-    function set_size_and_text(Total_value) {
+    function set_size(Total_value) {
         // function to set the sizes and mouse overs for everything
         gimage_L = d3.selectAll(".gimage");
         link_L = d3.selectAll(".link");
         oimage_L = d3.selectAll(".oimage");
-        mouse_over_L = d3.selectAll(".mouse_over");
-        lmouse_over_L = d3.selectAll(".lmouse_over");
-        omouse_over_L = d3.selectAll(".omouse_over");
         
 		gimage_L.attr("transform", function(d) { return d.answer_id ? "scale(" + d.radius/50 + ")" : "scale(" + d.radius/100 + ")"; });
         oimage_L.attr("transform", function(d) { return "scale(" + d.radius/50 + ")"; });
 		link_L.style("stroke-width", function(d) { return .5 * width * Math.sqrt(d.value/Total_value) / 18; });
         link_L.attr("class", function(d) { return d.is_max ? "link link_max" : "link"; });
-        
-        mouse_over_L.text(function(d) {
-            if (d.value_raw % 1 === 0) {
-                return image_offset[d.answer_id][0] + ": " + d.value_raw;
-            } else {
-                return image_offset[d.answer_id][0] + ": " + d.value_raw.toFixed(3);
-            }
-        });
-        lmouse_over_L.text(function(d) {
-            if (d.value % 1 === 0) {
-                return d.value;
-            } else {
-                return d.value.toFixed(3);
-            }
-	    });
-        omouse_over_L.text(function(d) {
-            if (d.value % 1 === 0) {
-                return image_offset[d.name][0] + ": " + d.value;
-            } else {
-                return image_offset[d.name][0] + ": " + d.value.toFixed(3);
-            }
-        });
     }
 
 	d3.select("#weight_raw_lab").on("click", function() {set_weight(0); });
@@ -504,7 +491,7 @@ function updateData(gal_id){
                 o.radius = o._radius[idx];
                 o.value = o._value[idx];
             });
-            set_size_and_text(_Total_value[idx]);
+            set_size(_Total_value[idx]);
             add_breadcrumb(_max_nodes[idx]);
 	        update_charge(d3.select("#slider_charge").property("value"));
 	    }
@@ -568,7 +555,7 @@ function updateData(gal_id){
 	        onode = onode.data(root.odd_list, function(d) { return d.name });
 	        // Exit old nodes
 	        onode.exit().remove();
-	        
+
 	        var oenter = onode.enter().append("g").attr("class","onode");
 		    
 	        var oimage = oenter.append("g").attr("class", "oimage");
@@ -583,7 +570,7 @@ function updateData(gal_id){
 		        .append("circle")
 		        .attr("cx", 0)
 		        .attr("cy", 0)
-		        .attr("r", 50);
+		        .attr("r", 50);            
 	        // add a black circle in the background
 	        oimage.append("circle")
 		        .attr("color", "black")
@@ -612,7 +599,33 @@ function updateData(gal_id){
 	            .attr("width", 100)
 	            .attr("height", 4900)
 	            .attr("opacity", .35);
-	        omouse_over = oenter.append("title").attr("class", "omouse_over");
+	        //omouse_over = oenter.append("title").attr("class", "omouse_over");
+            oenter
+                .on("mouseover", function(d) {
+                    var t;
+                    if (d.value % 1 === 0) {
+                        t = image_offset[d.name][0] + ": " + d.value;
+                    } else {
+                        t = image_offset[d.name][0] + ": " + d.value.toFixed(3);
+                    }
+                    var tooltip = d3.select("#node_tooltip")
+                        .style("left", d3.event.pageX + 10 + "px")
+                        .style("top", d3.event.pageY - 20 + "px")
+                        .style("opacity", 0)
+                        .text(t);
+                    d3.select("#node_tooltip").classed("hidden", false);
+                    tooltip.transition().delay(350).duration(200).style("opacity",0.9);
+                })
+                .on("mousemove", function(d) {
+                    d3.select("#node_tooltip")
+                        .style("left", d3.event.pageX + 10 + "px")
+                        .style("top", d3.event.pageY - 20 + "px")
+                })
+                .on("mouseout", function() {
+                    var tooltip = d3.select("#node_tooltip");
+                    tooltip.interrupt().transition();
+                    tooltip.transition().duration(200).style("opacity", 0).style("pointer-events", "none");
+                })
 	    }
         
 	    // Set data as node ids        
@@ -628,9 +641,33 @@ function updateData(gal_id){
 	    // add a path object to each link
 	    var lenter = link.enter().insert("path", ".gnode")
             .attr("class", function(d) { return d.is_max ? "link link_max" : "link"; })
-	        .attr("d", diagonal);
-
-	    var lmouse_over = lenter.append("title").attr("class", "lmouse_over");
+	        .attr("d", diagonal)
+            .on("mouseover", function(d) {
+                    var t;
+                    if (d.value % 1 === 0) {
+                        t = d.value;
+                    } else {
+                        t = d.value.toFixed(3);
+                    }
+                    var tooltip = d3.select("#node_tooltip")
+                        .style("left", d3.event.pageX + 10 + "px")
+                        .style("top", d3.event.pageY - 20 + "px")
+                        .style("opacity", 0)
+                        .text(t);
+                    d3.select("#node_tooltip").classed("hidden", false);
+                    tooltip.transition().delay(350).duration(200).style("opacity",0.9);
+                })
+                .on("mousemove", function(d) {
+                    d3.select("#node_tooltip")
+                        .style("left", d3.event.pageX + 10 + "px")
+                        .style("top", d3.event.pageY - 20 + "px")
+                })
+                .on("mouseout", function() {
+                    var tooltip = d3.select("#node_tooltip");
+                    tooltip.interrupt().transition();
+                    tooltip.transition().duration(200).style("opacity", 0).style("pointer-events", "none");
+                })
+	    //var lmouse_over = lenter.append("title").attr("class", "lmouse_over");
         
 	    // Exit any old links
 	    link.exit().remove();
@@ -693,8 +730,33 @@ function updateData(gal_id){
 	        .attr("opacity", .35);
 
 	    // add the mouse over text
-	    var mouse_over = genter.append("title").attr("class","mouse_over");
-
+        genter
+            .on("mouseover", function(d) {
+                var t;
+                if (d.value_raw % 1 === 0) {
+                    t = image_offset[d.answer_id][0] + ": " + d.value_raw;
+                } else {
+                    t = image_offset[d.answer_id][0] + ": " + d.value_raw.toFixed(3);
+                }
+                var tooltip = d3.select("#node_tooltip")
+                    .style("left", d3.event.pageX + 10 + "px")
+                    .style("top", d3.event.pageY - 20 + "px")
+                    .style("opacity", 0)
+                    .text(t);
+                tooltip.classed("hidden", false);
+                tooltip.transition().delay(350).duration(200).style("opacity",0.9);
+            })
+            .on("mousemove", function(d) {
+                d3.select("#node_tooltip")
+                    .style("left", d3.event.pageX + 10 + "px")
+                    .style("top", d3.event.pageY - 20 + "px")
+            })
+            .on("mouseout", function() {
+                var tooltip = d3.select("#node_tooltip");
+                tooltip.interrupt().transition();
+                tooltip.transition().duration(200).style("opacity", 0).style("pointer-events", "none");
+            })
+      
         // set the size and mouseover for each element
         set_weight(weight_state);
         

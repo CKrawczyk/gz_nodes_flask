@@ -72,6 +72,13 @@ svg {
     color: #000;
 }
 
+#node_tooltip {
+    background-color: #fff;
+    -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+}
+
 input[type='range'] {
     -webkit-appearance: none;
     border-radius: 30px;

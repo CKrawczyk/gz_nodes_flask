@@ -46,7 +46,8 @@ h1 {
 .btn-primary:focus,
 .btn-primary.focus,
 .btn-primary.active.focus,
-button:focus {
+button:focus,
+a {
     outline: 0 !important;
 }
 
@@ -139,6 +140,24 @@ svg {
     text-align: center;
     font-size: 16px;
     clear: both;
+}
+
+#node_tooltip {
+        position: absolute;
+        width: auto;
+        height: auto;
+        padding: 2px;
+        padding-right: 10px;
+        padding-left: 10px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        pointer-events: none;
+        margin: 0;
+}
+
+#node_tooltip.hidden {
+        display: none;
 }
 
 input[type='range']::-moz-range-track {
