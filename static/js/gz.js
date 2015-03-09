@@ -477,7 +477,8 @@ function updateData(gal_id){
 	function set_weight(idx) {
         if (weight_state!=idx || first_size) {
             first_size = false;
-            weight_state=idx;
+            weight_state = idx;
+            Total_value = _Total_value[idx];
 	        root.nodes.forEach(function(n) {
 		        n.radius = n._radius[idx];
                 n.value_raw = n._value[idx];
@@ -608,6 +609,7 @@ function updateData(gal_id){
                     } else {
                         t = image_offset[d.name][0] + ": " + d.value.toFixed(3);
                     }
+                    t += " (" + (100*d.value/Total_value).toFixed(2) + "%)"
                     var tooltip = d3.select("#node_tooltip")
                         .style("left", d3.event.pageX + 10 + "px")
                         .style("top", d3.event.pageY - 20 + "px")
@@ -649,25 +651,25 @@ function updateData(gal_id){
                     } else {
                         t = d.value.toFixed(3);
                     }
-                    var tooltip = d3.select("#node_tooltip")
-                        .style("left", d3.event.pageX + 10 + "px")
-                        .style("top", d3.event.pageY - 20 + "px")
-                        .style("opacity", 0)
-                        .text(t);
-                    d3.select("#node_tooltip").classed("hidden", false);
-                    tooltip.transition().delay(350).duration(200).style("opacity",0.9);
-                })
-                .on("mousemove", function(d) {
-                    d3.select("#node_tooltip")
-                        .style("left", d3.event.pageX + 10 + "px")
-                        .style("top", d3.event.pageY - 20 + "px")
-                })
-                .on("mouseout", function() {
-                    var tooltip = d3.select("#node_tooltip");
-                    tooltip.interrupt().transition();
-                    tooltip.transition().duration(200).style("opacity", 0).style("pointer-events", "none");
-                })
-	    //var lmouse_over = lenter.append("title").attr("class", "lmouse_over");
+                t += " (" + (100*d.value/Total_value).toFixed(2) + "%)"
+                var tooltip = d3.select("#node_tooltip")
+                    .style("left", d3.event.pageX + 10 + "px")
+                    .style("top", d3.event.pageY - 20 + "px")
+                    .style("opacity", 0)
+                    .text(t);
+                d3.select("#node_tooltip").classed("hidden", false);
+                tooltip.transition().delay(350).duration(200).style("opacity",0.9);
+            })
+            .on("mousemove", function(d) {
+                d3.select("#node_tooltip")
+                    .style("left", d3.event.pageX + 10 + "px")
+                    .style("top", d3.event.pageY - 20 + "px")
+            })
+            .on("mouseout", function() {
+                var tooltip = d3.select("#node_tooltip");
+                tooltip.interrupt().transition();
+                tooltip.transition().duration(200).style("opacity", 0).style("pointer-events", "none");
+            })
         
 	    // Exit any old links
 	    link.exit().remove();
@@ -682,8 +684,36 @@ function updateData(gal_id){
 	    var genter = gnode.enter().append("g")
 	        .attr("class", function(d) { return d.answer_id ? "gnode" : "gnode metadata-thumbnail"; })
 	        .call(force.drag)
-	        .on("click", function(d) { return d.answer_id ? click(d) : metadata_thumbnail(d); });    
-        
+	        .on("click", function(d) { return d.answer_id ? click(d) : metadata_thumbnail(d); })
+            .on("mouseover", function(d) {
+                var t;
+                if (d.value_raw % 1 === 0) {
+                    t = image_offset[d.answer_id][0] + ": " + d.value_raw;
+                } else {
+                    t = image_offset[d.answer_id][0] + ": " + d.value_raw.toFixed(3);
+                }
+                if (d.value<1) {
+                    t += " (" + (100*d.value).toFixed(2) + "%)";
+                }
+                var tooltip = d3.select("#node_tooltip")
+                    .style("left", d3.event.pageX + 10 + "px")
+                    .style("top", d3.event.pageY - 20 + "px")
+                    .style("opacity", 0)
+                    .text(t);
+                tooltip.classed("hidden", false);
+                tooltip.transition().delay(350).duration(200).style("opacity",0.9);
+            })
+            .on("mousemove", function(d) {
+                d3.select("#node_tooltip")
+                    .style("left", d3.event.pageX + 10 + "px")
+                    .style("top", d3.event.pageY - 20 + "px")
+            })
+            .on("mouseout", function() {
+                var tooltip = d3.select("#node_tooltip");
+                tooltip.interrupt().transition();
+                tooltip.transition().duration(200).style("opacity", 0).style("pointer-events", "none");
+            });
+      
 	    // add a group to the node to scale it
 	    // with this scaling the image (with r=50px) will have the propper radius
 	    var gimage = genter.append("g").attr("class", "gimage");
@@ -729,34 +759,6 @@ function updateData(gal_id){
 	        .attr("height", 4900)
 	        .attr("opacity", .35);
 
-	    // add the mouse over text
-        genter
-            .on("mouseover", function(d) {
-                var t;
-                if (d.value_raw % 1 === 0) {
-                    t = image_offset[d.answer_id][0] + ": " + d.value_raw;
-                } else {
-                    t = image_offset[d.answer_id][0] + ": " + d.value_raw.toFixed(3);
-                }
-                var tooltip = d3.select("#node_tooltip")
-                    .style("left", d3.event.pageX + 10 + "px")
-                    .style("top", d3.event.pageY - 20 + "px")
-                    .style("opacity", 0)
-                    .text(t);
-                tooltip.classed("hidden", false);
-                tooltip.transition().delay(350).duration(200).style("opacity",0.9);
-            })
-            .on("mousemove", function(d) {
-                d3.select("#node_tooltip")
-                    .style("left", d3.event.pageX + 10 + "px")
-                    .style("top", d3.event.pageY - 20 + "px")
-            })
-            .on("mouseout", function() {
-                var tooltip = d3.select("#node_tooltip");
-                tooltip.interrupt().transition();
-                tooltip.transition().duration(200).style("opacity", 0).style("pointer-events", "none");
-            })
-      
         // set the size and mouseover for each element
         set_weight(weight_state);
         
