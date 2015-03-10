@@ -143,7 +143,7 @@ class GZ_base:
         for r,w in zip(self.odd_list,self.odd_list_weight):
             all_odd.append(r)
             all_odd[-1]['_value']=[r['value'],w['value']]
-        s_strip={k:v for k,v in s.iteritems() if (k not in ['_id','project_id','location_geo','random','zooniverse_id','group_id','workflow_ids','group'])}
+        s_strip={k:v for k,v in s.iteritems() if (k not in ['_id','project_id','location_geo','random','zooniverse_id','group_id','workflow_ids','group','follower_ids'])}
         metadata=scrub_dict(s_strip)
         if self.survey_name in ['sloan','ukidss','ferengi','candels']:
             talk='http://talk.galaxyzoo.org/#/subjects/'+s['zooniverse_id']
