@@ -27,7 +27,14 @@ function resize_window() {
     }
 };
 
-$('[data-toggle="tooltip"]').tooltip();
+// wait for re-size event to be over before re-drawing
+var doit;
+window.onresize = function() {
+    clearTimeout(doit);
+    doit = setTimeout(resize_window, 100);
+};
+
+// some popover stuff
 $('[data-toggle="popover"]').popover();
 $('body').on('click', function (e) {
     $('[data-toggle="popover"]').each(function () {
@@ -39,12 +46,106 @@ $('body').on('click', function (e) {
     });
 });
 
-// wait for re-size event to be over before re-drawing
-var doit;
-window.onresize = function() {
-    clearTimeout(doit);
-    doit = setTimeout(resize_window, 100);
-};
+// Make a tour
+var tour = new Tour({
+    storage: false,
+    backdrop: true,
+    backdropPadding: 10,
+    container: "body",
+    steps: [
+        {
+            element: "#app_name",
+            backdrop: false,
+            placement: "bottom",
+            title: "Welcome",
+            content: "Welcome to the Galaxy Zoo visualization app!  The app allows you to visualize and explore the full user classifications for galaxies within Galaxy Zoo.  This quick tour will show you how to use this app."
+        },
+        {
+            element: "#help",
+            placement: "bottom",
+            title: "Help",
+            content: "Click the help button at any time to display all the information in this tour on one page."
+        },
+        {
+            element: "#color_buttons",
+            placement: "bottom",
+            title: "Color",
+            content: "Use these buttons to toggle between light and dark color schemes."
+        },
+        {
+            element: "#search_buttons",
+            backdrop: true,
+            backdropPadding: {
+                bottom: 10,
+                right: 10,
+                left: 10
+            },
+            placement: "bottom",
+            title: "Search",
+            content: "You can search for galaxies either using their Zooniverse ID (or SDSS ID in the case of GZ2), their RA DEC (space or comma seperated), or pick a random galaxy."
+        },
+        {
+            element: "#zoo_buttons",
+            placement: "bottom",
+            title: "Data set",
+            content: "Here you pick what Galaxy Zoo data set to explore. Each data set uses a slightly different decision tree.  You can also upload your own <code>.csv</code> file containing a custom set of galaxies (see the 'help' button for more information about this)."
+        },
+        {
+            element: "#weight_buttons",
+            placement: "bottom",
+            title: "User weights",
+            content: "Use these buttons to toggle between the raw vote count and the user weighted vote count. This is currently only available for GZ2 and GZ3 data."
+        },
+        {
+            element: "#tree",
+            placement: "top",
+            title: "Node Tree",
+            content: "This area shows the node tree visualization for the selected galaxy."
+        },
+        {
+            element: "#sequence",
+            placement: "bottom",
+            title: "Max vote path",
+            content: "Here is a summery of the maximum vote path including the number of votes for each node along it. This path is also highlighted in the node tree below."
+        },
+        {
+            element: "#RA_DEC",
+            placement: "bottom",
+            title: "Galaxy location",
+            content: "The RA and DEC for the selected galaxy."
+        },
+        {
+            element: "#gal_image",
+            backdrop: false,
+            placement: "top",
+            title: "Galaxy data",
+            content: "An image of the selected galaxy is shown in the first node.  Clicking on this image will bring up more information about the galaxy, including a link to the GZ talk for GZ4 galaxies."
+        },
+        {
+            element: "#body",
+            placement: "bottom",
+            title: "Node Tree",
+            content: "<p>The full vote path for each user is represented by this node tree.  Each node represents one answer from the GZ decision tree and the size of the node is proportional the number of users who voted for that answer. The 'Xs' and 'checks' indicate 'no' and 'yes' responses to various questions.</p> <p>Mouse over each node to see a description of the answer and see the vote count for it. Draging the nodes will move them around, and clicking them will collapse/expand all the links leading out of it.</p> <p>Mouse over each link to see the vote count for that link.</p>"
+        },
+        {
+            element: "#odd",
+            placement: "top",
+            orphan: true,
+            title: "Anything odd?",
+            content: "The answers to the 'Is there antyhing odd?' ( or 'Is there a merger?' in the case of GZ 4 Candels) question are located here."
+        },
+        {
+            element: "#controls",
+            placement: "top",
+            title: "Node controls",
+            content: "You can use these sliders to adjust how the nodes interact with each other.  Click on their names for a description of their action.  You can also use the 'reset' button to re-draw the tree using the default values."
+        }
+]});
+tour.init();
+
+d3.select("#tour").on("click", function() {
+    tour.restart();
+});
 
 // Hook up buttons
 d3.select("#help").on("click", function() {
@@ -737,6 +838,7 @@ function updateData(gal_id){
 	    // add the inital image to the node
 	    gimage.append("image")
 	        .attr("xlink:href", function(d) { return d.answer_id ? "./static/images/workflow.png" : root.image_url})
+            .attr("id", function(d) { return d.answer_id ? "node_image" : "gal_image"})
 	        .attr("x", function(d) { return d.answer_id ? -50: -100; })
 	        .attr("y", function(d) { return d.answer_id ? -image_offset[d.answer_id][1]*100-50 : -100; })
 	        .attr("clip-path", function(d) { return "url(#myClip" + d.node_id + ")"; })

@@ -162,6 +162,12 @@ svg {
 
 .popover {
     color: #000;
+    max-width: 800px;
+}
+
+.popover[class*="tour-"] {
+    z-index: 2100;
+    width: auto;
 }
 
 input[type='range']::-moz-range-track {

@@ -6,6 +6,7 @@ import gz4_sloan_ukidss as sloan_ukidss
 import gz4_ferengi as ferengi
 import gz4_candels as candels
 from pprint import pprint
+from bson import objectid
 
 #=====================================================
 #function to split lists on a value, used to pull out
@@ -152,6 +153,7 @@ class GZ_base:
 
 def scrub_dict(d):
     d={k:v for k,v in d.iteritems() if (v not in [-9999,None,"null",-999])}
+    d={k:v for k,v in d.iteritems() if (not isinstance(v,objectid.ObjectId))}
     for k,v in d.iteritems():
         if isinstance(v,dict):
             d[k]=scrub_dict(v)
