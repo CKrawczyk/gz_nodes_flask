@@ -161,6 +161,7 @@ svg {
 }
 
 .popover {
+    z-index: 2200;
     color: #000;
     max-width: 800px;
 }

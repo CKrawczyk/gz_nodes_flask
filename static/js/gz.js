@@ -119,13 +119,13 @@ var tour = new Tour({
             backdrop: false,
             placement: "top",
             title: "Galaxy data",
-            content: "An image of the selected galaxy is shown in the first node.  Clicking on this image will bring up more information about the galaxy, including a link to the GZ talk for GZ4 galaxies."
+            content: "An image of the selected galaxy is shown in the first node.  Clicking on this image will bring up more information about the galaxy including a link to talk for GZ4 galaxies."
         },
         {
             element: "#body",
             placement: "bottom",
             title: "Node Tree",
-            content: "<p>The full vote path for each user is represented by this node tree.  Each node represents one answer from the GZ decision tree and the size of the node is proportional the number of users who voted for that answer. The 'Xs' and 'checks' indicate 'no' and 'yes' responses to various questions.</p> <p>Mouse over each node to see a description of the answer and see the vote count for it. Draging the nodes will move them around, and clicking them will collapse/expand all the links leading out of it.</p> <p>Mouse over each link to see the vote count for that link.</p>"
+            content: "<p>The full vote path for each user is represented by this node tree.  Each node represents one answer from the GZ decision tree and the size of the node is proportional the number of users who voted for that answer. The 'Xs' and 'checks' indicate 'no' and 'yes' responses (<b>not</b> 'right' and 'wrong') to various questions.</p> <p>Mouse over each node to see a description of the answer and see the vote count for it. Dragging the nodes will move them around, and clicking them will collapse/expand all the links leading out of it.</p> <p>Mouse over each link to see the vote count for that link. The links for the maximal path are highlighted.</p>"
         },
         {
             element: "#odd",
@@ -139,6 +139,24 @@ var tour = new Tour({
             placement: "top",
             title: "Node controls",
             content: "You can use these sliders to adjust how the nodes interact with each other.  Click on their names for a description of their action.  You can also use the 'reset' button to re-draw the tree using the default values."
+        },
+        {
+            element: "#charge",
+            placement: "top",
+            title: "Charge",
+            content: "How much the nodes repel each other."
+        },
+        {
+            element: "#link_strength",
+            placement: "top",
+            title: "Link strength",
+            content: "How 'stiff' the links between the nodes are."
+        },
+        {
+            element: "#friction",
+            placement: "top",
+            title: "Friction",
+            content: "How damped the node movement is (0=frictionless, 1=no movement)."
         }
 ]});
 tour.init();
