@@ -202,11 +202,11 @@
               <p>This web app visualizes the results of <a href="http://www.galaxyzoo.org/">Galaxy Zoo</a> as a node tree. Each tree shows the full vote path for one galaxy (image in the first node).</p>
               <h3>Features:</h3>
               <ul>
-                <li>Each node represents the answer to a qustion asked to the useres of Galaxy Zoo</li>
+                <li>Each node represents the answer to a question asked to the users of Galaxy Zoo</li>
                 <ul>
-                  <li>Note: the "checks" and "x's" repersent "yes" and "no" responses to a question (e.g. "Does the galaxy have a bar?")</li>
+                  <li>Note: the "checks" and "x's" represent "yes" and "no" responses to a question (e.g. "Does the galaxy have a bar?")</li>
                 </ul>
-                <li>The size of each node/link is proportianal to the sqrt(number of votes)</li>
+                <li>The size of each node/link is proportional to the sqrt(number of votes)</li>
                 <li>The maximal vote path is highlighted and shown in words across the top</li>
                 <ul>
                   <li>Note: this path follows the links with the most votes at each node, not the nodes with the most votes</li>
@@ -218,14 +218,14 @@
               <ul>
                 <li>Mouse over each node to see a description of the node and the number of votes for it</li>
                 <li>Mouse over each link to see the number of votes along that link</li>
-                <li>Click and drage the nodes to move them around</li>
+                <li>Click and drag the nodes to move them around</li>
                 <ul>
-                  <li>When the nodes are moving they are allowed to pass thorugh each other, but after they settle down collision detection is turned on so they don't overlap</li>
+                  <li>When the nodes are moving they are allowed to pass through each other, but after they settle down collision detection is turned on so they don't overlap</li>
                   <li>The nodes with the most votes attempt to move towards the top</li>
                 </ul>
                 <li>Click on the galaxy image to bring up more information about the galaxy</li>
                 <li>Click on any other node to collapse/expand the links leading from it</li>
-                <li>The sliders at the bottome can be used to adjsut how the nodes interact with each other</li>
+                <li>The sliders at the bottom can be used to adjust how the nodes interact with each other</li>
                 <ul>
                   <li>Charge: how much the nodes repel each other (also proportional to vote count)</li>
                   <li>Link Strength: how "stiff" the links between the nodes are</li>
@@ -233,7 +233,7 @@
                   <li>Reset button: redraw the tree using default values</li>
                 </ul>
               </ul>
-
+              
               <h3>Navigation:</h3>
               <ul>
                 <li>Use the "Dark/Light" buttons to toggle between color schemes</li>
@@ -241,44 +241,44 @@
                 <li>Use the search bar to look up a galaxy using:</li>
                 <ul>
                   <li>Zooniverse ID (or SDSS ID in the case of GZ2)</li>
-                  <li>RA and DEC (space or comma seperated)</li>
+                  <li>RA and DEC (space or comma separated)</li>
                   <li>Random galaxy (click button or search "random")</li>
                 </ul>
               </ul>
-
-              <h3>Create a custom galaxy list by uplaoding a <code>.csv</code> file:</h3>
+              
+              <h3>Create a custom galaxy list by uploading a <code>.csv</code> file:</h3>
               <ul>
                 <li>
-                  <p>This file should contain two colums <code>value,table</code> provideing a valid search term (see above) and the GZ table to search</p>
+                  <p>This file should contain two columns <code>value,table</code> providing a valid search term (see above) and the GZ table to search</p>
                   <p>Example:</p>
                   <pre>
-value,table
-180 90,gz2
-587733609628696658,gz2
-588011502072234044,gz2
-15.768 0.474,gz2
-136.145 14.593,gz2
-AHZ20003km,gz3
-AHZ6000bvu,gz3
-AGZ0002m46,gz4_s
-AGZ0003diy,gz4_s
-AGZ00014r1,gz4_s
-AGZ0004v0i,gz4_s
-AGZ00000s3,gz4_c
-AGZ0006ry1,gz4_u
-AGZ0007te4,gz4_f
-AGZ0007to6,gz4_f
+                    value,table
+                    180 90,gz2
+                    587733609628696658,gz2
+                    588011502072234044,gz2
+                    15.768 0.474,gz2
+                    136.145 14.593,gz2
+                    AHZ20003km,gz3
+                    AHZ6000bvu,gz3
+                    AGZ0002m46,gz4_s
+                    AGZ0003diy,gz4_s
+                    AGZ00014r1,gz4_s
+                    AGZ0004v0i,gz4_s
+                    AGZ00000s3,gz4_c
+                    AGZ0006ry1,gz4_u
+                    AGZ0007te4,gz4_f
+                    AGZ0007to6,gz4_f
                   </pre>
                 </li>
                 <li>After uploading a file the search field will become a dropdown list containing your galaxy sample and you will be provided with "previous" and "next" navigation buttons</li>
-                <li>Note: Keep uploaded file sizes below ~35 KB (~2000 rows) to avoid freezing your browser. All file reading/parsing is handeled in client size js.</li>
+                <li>Note: Keep uploaded file sizes below ~35 KB (~2000 rows) to avoid freezing your browser. All file reading/parsing is handled in client size js.</li>
               </ul>
-
+              
               <h3>Future plans:</h3>
               <ul>
                 <li>Visualizing the vote path for a "collection" of galaxies.</li>
               </ul>
-
+              
               <h3>Other information:</h3>
               <ul>
                 <li>This app was build using <a href="http://d3js.org">D3js</a> and <a href="http://getbootstrap.com/">Twitter's bootstrap</a></li>

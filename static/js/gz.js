@@ -58,7 +58,7 @@ var tour = new Tour({
             backdrop: false,
             placement: "bottom",
             title: "Welcome",
-            content: "Welcome to the Galaxy Zoo visualization app!  The app allows you to visualize and explore the full user classifications for galaxies within Galaxy Zoo.  This quick tour will show you how to use this app."
+            content: "Welcome to the Galaxy Zoo visualization app! The app allows you to visualize and explore the full user classifications for galaxies within Galaxy Zoo. This quick tour will show you how to use this app."
         },
         {
             element: "#help",
@@ -82,13 +82,13 @@ var tour = new Tour({
             },
             placement: "bottom",
             title: "Search",
-            content: "You can search for galaxies either using their Zooniverse ID (or SDSS ID in the case of GZ2), their RA DEC (space or comma seperated), or pick a random galaxy."
+            content: "You can search for galaxies either using their Zooniverse ID (or SDSS ID in the case of GZ2), their RA DEC (space or comma separated), or pick a random galaxy."
         },
         {
             element: "#zoo_buttons",
             placement: "bottom",
             title: "Data set",
-            content: "Here you pick what Galaxy Zoo data set to explore. Each data set uses a slightly different decision tree.  You can also upload your own <code>.csv</code> file containing a custom set of galaxies (see the 'help' button for more information about this)."
+            content: "Here you pick what Galaxy Zoo data set to explore. Each data set uses a slightly different decision tree. You can also upload your own <code>.csv</code> file containing a custom set of galaxies (see the 'help' button for more information about this)."
         },
         {
             element: "#weight_buttons",
@@ -119,26 +119,26 @@ var tour = new Tour({
             backdrop: false,
             placement: "top",
             title: "Galaxy data",
-            content: "An image of the selected galaxy is shown in the first node.  Clicking on this image will bring up more information about the galaxy including a link to talk for GZ4 galaxies."
+            content: "An image of the selected galaxy is shown in the first node. Clicking on this image will bring up more information about the galaxy including a link to talk for GZ4 galaxies."
         },
         {
             element: "#body",
             placement: "bottom",
             title: "Node Tree",
-            content: "<p>The full vote path for each user is represented by this node tree.  Each node represents one answer from the GZ decision tree and the size of the node is proportional the number of users who voted for that answer. The 'Xs' and 'checks' indicate 'no' and 'yes' responses (<b>not</b> 'right' and 'wrong') to various questions.</p> <p>Mouse over each node to see a description of the answer and see the vote count for it. Dragging the nodes will move them around, and clicking them will collapse/expand all the links leading out of it.</p> <p>Mouse over each link to see the vote count for that link. The links for the maximal path are highlighted.</p>"
+            content: "<p>The full vote path for each user is represented by this node tree. Each node represents one answer from the GZ decision tree and the size of the node is proportional the number of users who voted for that answer. The 'Xs' and 'checks' indicate 'no' and 'yes' responses (<b>not</b> 'right' and 'wrong') to various questions.</p> <p>Mouse over each node to see a description of the answer and see the vote count for it. Dragging the nodes will move them around, and clicking them will collapse/expand all the links leading out of it.</p> <p>Mouse over each link to see the vote count for that link. The links for the maximal path are highlighted.</p>"
         },
         {
             element: "#odd",
             placement: "top",
             orphan: true,
             title: "Anything odd?",
-            content: "The answers to the 'Is there antyhing odd?' ( or 'Is there a merger?' in the case of GZ 4 Candels) question are located here."
+            content: "The answers to the 'Is there anything odd?' ( or 'Is there a merger?' in the case of GZ 4 Candels) question are located here."
         },
         {
             element: "#controls",
             placement: "top",
             title: "Node controls",
-            content: "You can use these sliders to adjust how the nodes interact with each other.  Click on their names for a description of their action.  You can also use the 'reset' button to re-draw the tree using the default values."
+            content: "You can use these sliders to adjust how the nodes interact with each other. Click on their names for a description of their action. You can also use the 'reset' button to re-draw the tree using the default values."
         },
         {
             element: "#charge",
@@ -158,7 +158,7 @@ var tour = new Tour({
             title: "Friction",
             content: "How damped the node movement is (0=frictionless, 1=no movement)."
         }
-]});
+    ]});
 tour.init();
 
 d3.select("#tour").on("click", function() {
