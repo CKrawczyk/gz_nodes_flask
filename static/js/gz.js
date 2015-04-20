@@ -622,14 +622,19 @@ function updateData(gal_id){
 	    $('#meta-body').empty();
         var title = current_gal;
         var metastring = JSON.stringify(metadata,null,2);
-        var talk_link = root.talk
+        var talk_link = root.talk;
+        var exam_link = root.exam;
         // remove quotes
         metastring = metastring.replace(/\"([^(\")"]+)\"/g,"$1");
         //metastring = metastring.replace(/[,]+/g, "")
         if (talk_link) {
-            $('#meta-title').html('<a href='+talk_link+' target="_blank">'+title+'</a>');
+            $('#meta-title').html(title+', <a href='+talk_link+' target="_blank">Talk</a>, <a href='+exam_link+' target="_blank">Examine</a>');
         } else {
-            $('#meta-title').html(title);
+            if (metadata.metadata.external_ref) {
+                $('#meta-title').html(title+', <a href='+metadata.metadata.external_ref+' target="_blank">SDSS quick look</a>')
+            } else {
+                $('#meta-title').html(title);
+            }
         }
         $('#meta-body').html('<pre class="modal-data">'+metastring+'</pre>');
 	    $('#myModal').modal({show:true});
