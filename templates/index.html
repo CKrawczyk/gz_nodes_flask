@@ -15,7 +15,7 @@
   <body>
     <header>
       <div class="container" id="header">
-        <div class="btn-toolbar pull-right" role="toolbar">
+        <div class="btn-toolbar pull-right hidden-print" role="toolbar">
           <div class="btn-group btn-group-xs" roll="group">
             <button type="button" class="btn btn-primary" id="tour">Take a tour</button>
           </div>
@@ -36,10 +36,10 @@
     
     <div class="container" id="body_container">
       <div class="row">
-        <div class="col-md-7 col-sm-12">
+        <div class="col-md-7 col-sm-12 hidden-print">
           <h1 id="app_name">Node Tree: Galaxy Zoo</h1>
         </div>
-        <div class="col-md-5 col-sm-12" id="search_button_cell">
+        <div class="col-md-5 col-sm-12 hidden-print" id="search_button_cell">
           <div class="input-group" id="search_buttons">
             <input type="text" class="form-control" id="galaxies">
             <span class="input-group-btn">
@@ -48,7 +48,7 @@
             </span>
           </div>
         </div>
-        <div class="col-md-5 col-sm-12" id="upload_dd_cell" style="display: none;">
+        <div class="col-md-5 col-sm-12 hidden-print" id="upload_dd_cell" style="display: none;">
           <div class="input-group" id="dd_buttons">
             <select class="selectpicker" id="upload_galaxy" data-width="100%">
             </select>
@@ -61,7 +61,7 @@
         </div>
       </div>
       
-      <div class="row" id="nav_row">
+      <div class="row hidden-print" id="nav_row">
         <div class="col-md-9 col-sm-12">
           <div class="btn-group btn-group-sm pull-right-md" data-toggle="buttons" id="zoo_buttons">
             <label class="btn btn-primary"  id="upload_lab">
@@ -91,7 +91,7 @@
           </div>
         </div>
         
-        <div class="col-md-3 col-sm-12">
+        <div class="col-md-3 col-sm-12 hidden-print">
           <div class="btn-group btn-group-sm pull-right" data-toggle="buttons" id="weight_buttons">
             <label class="btn btn-primary active" id="weight_raw_lab">
               <input type="radio" name="weight_tab" autocomplete="off"  id="weight_raw" checked>Raw Votes
@@ -114,7 +114,7 @@
         </div>
       </div>
       
-      <div class="row" id="controls">
+      <div class="row hidden-print" id="controls">
         
         <div class="col-lg-2 col-lg-offset-2 col-sm-3" id="charge">
           <div class="row">
@@ -166,8 +166,8 @@
         </div>        
       </div>
       
-      <footer>
-        <aside class="pull-right">March 9, 2015</aside>
+      <footer class="hidden-print">
+        <aside class="pull-right">April 20, 2015</aside>
         <a class="pull-left" href="http://www.zooniverse.org" target="_blank" rel="author">Zooniverse</a>
       </footer>
 
