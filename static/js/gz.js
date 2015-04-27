@@ -132,7 +132,7 @@ var tour = new Tour({
             placement: "top",
             orphan: true,
             title: "Anything odd?",
-            content: "The answers to the 'Is there anything odd?' ( or 'Is there a merger?' in the case of GZ 4 Candels) question are located here."
+            content: "The answers to the 'Is there anything odd?' ( or 'Is there a merger?' in the case of GZ 4 CANDELS) question are located here."
         },
         {
             element: "#controls",
