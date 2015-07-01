@@ -308,7 +308,7 @@ function set_zoo(search) {
         d3.select("#weight_raw_lab").classed({"active":true});
         d3.select("#weight_weighted_lab").classed({"disabled":true,"active":false});
     }
-    // read in file that maps the answer_id to the 
+    // read in file that maps the answer_id to the
     // image offset in workflow.png and providing a useful
     // mouse over message
     d3.json("./static/config/zoo"+zoo+"_offset.json", function(d){
@@ -454,14 +454,14 @@ function updateData(gal_id){
 	    });
 	    g_bc.exit().remove();
     }
-    
+
     // now that the basics are set up read in the json file
     var Total_value
     var _Total_value
     var current_gal
     var metadata
     var _max_nodes
-    function json_callback(answers) { 
+    function json_callback(answers) {
 	    // draw the galaxy image
 	    $(".galaxy-image").attr("src", answers.image_url);
 	    // Add text for RA and DEC
@@ -475,7 +475,7 @@ function updateData(gal_id){
 	        updateData(current_gal);
         }
         d3.select("#reset_button").on("click", reset_data)
-        
+
 	    // make sure dropdown list matches this id (useful for refresh)
 	    d3.select("#galaxies").property("value",answers.gal_name)
 	    root = answers;
@@ -530,7 +530,7 @@ function updateData(gal_id){
 	    max_path(root.nodes[0],0);
         max_path(root.nodes[0],1);
         var max_nodes=_max_nodes[0]
-	    
+
 	    // Normalize votes by total number
 	    Total_value=root.nodes[0].value
         _Total_value=[Total_value, root.nodes[0].wvalue]
@@ -543,19 +543,19 @@ function updateData(gal_id){
 	        node.radius = (1-2*.07) * width * Math.sqrt(node.value) / 18;
             node._radius = [node.radius, (1-2*.07) * width * Math.sqrt(node.wvalue) / 18];
 	        node.node_id = i;
-	    });     
+	    });
 	    // get the x position for each node
 	    computeNodeBreadths(root);
-	    // find how deep the tree goes and set the linkDistance to match 
+	    // find how deep the tree goes and set the linkDistance to match
 	    max_level = d3.max(root.nodes, function(d) {return d.fixed_level; });
 	    force.linkDistance(.8*width/(max_level + 1));
-	    
+
 	    // good starting points
 	    root.nodes.forEach(function(d , i) {
 	        d.x = d.fixed_x;
 	        // find if smooth or spiral is voted the most
 	        // and put that group on top
-	        if (root.nodes[1].value > root.nodes[2].value) { 
+	        if (root.nodes[1].value > root.nodes[2].value) {
 		        j = 1;
 	        } else {
 		        j = -1;
@@ -583,7 +583,7 @@ function updateData(gal_id){
         gimage_L = d3.selectAll(".gimage");
         link_L = d3.selectAll(".link");
         oimage_L = d3.selectAll(".oimage");
-        
+
 		gimage_L.attr("transform", function(d) { return d.answer_id ? "scale(" + d.radius/50 + ")" : "scale(" + d.radius/100 + ")"; });
         oimage_L.attr("transform", function(d) { return "scale(" + d.radius/50 + ")"; });
 		link_L.style("stroke-width", function(d) { return .5 * width * Math.sqrt(d.value/Total_value) / 18; });
@@ -616,7 +616,7 @@ function updateData(gal_id){
 	        update_charge(d3.select("#slider_charge").property("value"));
 	    }
     }
-    
+
     // format the shadow-box for metadata
     function metadata_thumbnail(d) {
 	    $('#meta-body').empty();
@@ -638,8 +638,8 @@ function updateData(gal_id){
         }
         $('#meta-body').html('<pre class="modal-data">'+metastring+'</pre>');
 	    $('#myModal').modal({show:true});
-    };   
-    
+    };
+
     // make the links long nice by using diagonal
     // swap x and y so the curve goes the propper way
     var diagonal = d3.svg.diagonal()
@@ -657,37 +657,37 @@ function updateData(gal_id){
     function update(nodes_in, links_in) {
         // draw odd nodes
         var n_odd_nodes = root.odd_list.length;
-        
+
         if (n_odd_nodes > 0 && first_draw) {
             first_draw = false;
 	        // place for the "odd" answers to go
 	        var odd_answers1 = d3.select("#odd").append("svg")
 		        .attr("width",width + margin.left + margin.right)
 		        .attr("height",(width-2*.07)/9 + margin.top + margin.bottom)
-            
+
 	        var odd_answers = odd_answers1.append("g")
 		        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-            
+
 	        var onode = odd_answers.selectAll(".onode");
-            
+
 	        root.odd_list.forEach(function(d) {
 		        value = d.value / Total_value;
                 wvalue = d._value[1] / _Total_value[1]
 		        d.radius = width * (1-2*.07) * Math.sqrt(value) / 18
                 d._radius = [d.radius, width * (1-2*.07) * Math.sqrt(wvalue) / 18]
 	        });
-	        
+
 	        onode = onode.data(root.odd_list, function(d) { return d.name });
 	        // Exit old nodes
 	        onode.exit().remove();
 
 	        var oenter = onode.enter().append("g").attr("class","onode");
-		    
+
 	        var oimage = oenter.append("g").attr("class", "oimage");
-            
+
 	        odd_answers1.attr("height",2*Math.ceil(root.odd_list[0].radius) + margin.top + margin.bottom);
 	        oenter.attr("transform", function(d,i) {
-		        return 'translate(' + [width*(i+.5)/n_odd_nodes, Math.ceil(root.odd_list[0].radius)] + ')'; 
+		        return 'translate(' + [width*(i+.5)/n_odd_nodes, Math.ceil(root.odd_list[0].radius)] + ')';
 		    });
 	        oimage.append("defs")
 		        .append("clipPath")
@@ -695,7 +695,7 @@ function updateData(gal_id){
 		        .append("circle")
 		        .attr("cx", 0)
 		        .attr("cy", 0)
-		        .attr("r", 50);            
+		        .attr("r", 50);
 	        // add a black circle in the background
 	        oimage.append("circle")
 		        .attr("color", "black")
@@ -713,7 +713,7 @@ function updateData(gal_id){
 	        oimage.append("image")
 	            .attr("xlink:href", "./static/images/workflow.png")
 	            .attr("x", -50)
-	            .attr("y", function(d) { 
+	            .attr("y", function(d) {
 		            if (d.name) {
 		                return image_offset[d.name][2] ? -image_offset[d.name][2]*100-50 : 100;
 		            } else {
@@ -733,7 +733,7 @@ function updateData(gal_id){
                     } else {
                         t = image_offset[d.name][0] + ": " + d.value.toFixed(3);
                     }
-                    t += " (" + (100*d.value/Total_value).toFixed(2) + "%)"
+                    t += " (" + (100*d.value/Total_value).toFixed(2) + "% of total votes)"
                     var tooltip = d3.select("#node_tooltip")
                         .style("left", d3.event.pageX + 10 + "px")
                         .style("top", d3.event.pageY - 20 + "px")
@@ -753,8 +753,8 @@ function updateData(gal_id){
                     tooltip.transition().duration(200).style("opacity", 0).style("pointer-events", "none");
                 })
 	    }
-        
-	    // Set data as node ids        
+
+	    // Set data as node ids
 	    // add the nodes and links to the tree
 	    force
 	        .nodes(nodes_in)
@@ -763,7 +763,7 @@ function updateData(gal_id){
 
 	    // set the data for the links (with unique ids)
 	    link = link.data(links_in, function(d) { return d.link_id; });
-        
+
 	    // add a path object to each link
 	    var lenter = link.enter().insert("path", ".gnode")
             .attr("class", function(d) { return d.is_max ? "link link_max" : "link"; })
@@ -775,7 +775,7 @@ function updateData(gal_id){
                     } else {
                         t = d.value.toFixed(3);
                     }
-                t += " (" + (100*d.value/Total_value).toFixed(2) + "%)"
+                t += " (" + (100*d.value/Total_value).toFixed(2) + "% of total votes)"
                 var tooltip = d3.select("#node_tooltip")
                     .style("left", d3.event.pageX + 10 + "px")
                     .style("top", d3.event.pageY - 20 + "px")
@@ -794,7 +794,7 @@ function updateData(gal_id){
                 tooltip.interrupt().transition();
                 tooltip.transition().duration(200).style("opacity", 0).style("pointer-events", "none");
             })
-        
+
 	    // Exit any old links
 	    link.exit().remove();
 
@@ -803,7 +803,7 @@ function updateData(gal_id){
 
 	    // Exit any old nodes
 	    gnode.exit().remove();
-        
+
 	    // add a group to the node to translate it
 	    var genter = gnode.enter().append("g")
 	        .attr("class", function(d) { return d.answer_id ? "gnode" : "gnode metadata-thumbnail"; })
@@ -817,13 +817,20 @@ function updateData(gal_id){
                     t = image_offset[d.answer_id][0] + ": " + d.value_raw.toFixed(3);
                 }
                 if (d.value<1) {
-                    t += " (" + (100*d.value).toFixed(2) + "%)";
+                    t += " (" + (100*d.value).toFixed(2) + "% of total votes)";
+										var task_total = 0;
+										root.nodes.forEach(function(n) {
+											if (n.question === d.question) {
+												task_total += n.value_raw;
+											}
+										})
+										t += "<br> (" + (100*d.value_raw/task_total).toFixed(2) + "% of votes on this task)";
                 }
                 var tooltip = d3.select("#node_tooltip")
                     .style("left", d3.event.pageX + 10 + "px")
                     .style("top", d3.event.pageY - 20 + "px")
                     .style("opacity", 0)
-                    .text(t);
+                    .html(t);
                 tooltip.classed("hidden", false);
                 tooltip.transition().delay(350).duration(200).style("opacity",0.9);
             })
@@ -837,7 +844,7 @@ function updateData(gal_id){
                 tooltip.interrupt().transition();
                 tooltip.transition().duration(200).style("opacity", 0).style("pointer-events", "none");
             });
-      
+
 	    // add a group to the node to scale it
 	    // with this scaling the image (with r=50px) will have the propper radius
 	    var gimage = genter.append("g").attr("class", "gimage");
@@ -867,12 +874,12 @@ function updateData(gal_id){
 	        .attr("clip-path", function(d) { return "url(#myClip" + d.node_id + ")"; })
 	        .attr("width", function(d) { return d.answer_id ? 100: 200; })
 	        .attr("height", function(d) { return d.answer_id ? 4900: 200; });
-	    
+
 	    // add the yes/no image if needed
 	    gimage.append("image")
 	        .attr("xlink:href", "./static/images/workflow.png")
 	        .attr("x", -50)
-	        .attr("y", function(d) { 
+	        .attr("y", function(d) {
 		        if (d.answer_id) {
 		            return image_offset[d.answer_id][2] ? -image_offset[d.answer_id][2]*100-50 : 100;
 		        } else {
@@ -886,7 +893,7 @@ function updateData(gal_id){
 
         // set the size and mouseover for each element
         set_weight(weight_state);
-        
+
 	    // start the nodes moving
 	    force.start();
 	    //for (var i = 500; i > 0; --i) force.tick();
@@ -896,14 +903,14 @@ function updateData(gal_id){
 	    function tick(e) {
 	        // make sure the force gets smaller as the simulation runs
 	        var ky = 10 * e.alpha;
-	        
+
 	        root.nodes.forEach(function(d, i) {
 		        // fix the x value at the depth of the node
 		        // and add in the radius of the first node
 		        i!=0 ? d.x = d.fixed_x + root.nodes[0].radius+50 : d.x = d.fixed_x + root.nodes[0].radius;
 		        // move low prob nodes down
 		        // and keep the groups together (to a lesser extent)
-		        if (root.nodes[1].value > root.nodes[2].value) { 
+		        if (root.nodes[1].value > root.nodes[2].value) {
 		            j = 1;
 		        } else {
 		            j = -1;
@@ -928,17 +935,17 @@ function updateData(gal_id){
 		            n=root.nodes.length;
 		        while (++i < n) q.visit(collide(root.nodes[i]));
 	        }
-	        
+
 	        // if the new position is NaN use the previous position
 	        // this prevents links for disappearing
 	        root.nodes.forEach( function(d) {
 		        if (isNaN(d.y)) { d.y = d.y_old; }
 	        });
-	        
+
 	        // Translate the node group to the new position
 	        gnode.attr("transform", function(d) {
-		        return 'translate(' + [d.x, d.y] + ')'; 
-	        });    
+		        return 'translate(' + [d.x, d.y] + ')';
+	        });
 	        link.attr("d",diagonal);
 	    };
 	    // the collision detection code
@@ -972,7 +979,7 @@ function updateData(gal_id){
 	    var remainingNodes = root.nodes,
 	        nextNodes,
 	        x = 0;
-	    
+
 	    while (remainingNodes.length) {
 	        nextNodes = [];
 	        remainingNodes.forEach(function(node) {
@@ -985,12 +992,12 @@ function updateData(gal_id){
 	        });
 	        remainingNodes = nextNodes;
 	        ++x;
-	    }	  
+	    }
 	    moveSinksRight(x);
 	    // don't scale to the full width or the nodes go off the page
 	    scaleNodeBreadths(.87 * (width-50) / (x - 1));
     };
-    
+
     function moveSinksRight(x) {
 	    root.nodes.forEach(function(node) {
 	        if (!node.sourceLinks.length) {
@@ -998,7 +1005,7 @@ function updateData(gal_id){
 	        }
 	    });
     };
-    
+
     function scaleNodeBreadths(kx) {
 	    root.nodes.forEach(function(node) {
 	        node.fixed_level = node.fixed_x;
@@ -1034,5 +1041,3 @@ function updateData(gal_id){
 	    update(current_nodes, current_links);
     };
 };
-
-
